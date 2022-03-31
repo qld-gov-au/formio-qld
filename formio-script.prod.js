@@ -58,7 +58,7 @@ var getDefaultScripts = function getDefaultScripts(_ref2) {
 };
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/scriptProd.js
 
-var version = "v1/v1.x.x-latest";
+var version = window.formioQldCdnVersion || "v1/v1.x.x-latest";
 var scripts = [{
   type: "script",
   src: "https://static.qgov.net.au/formio-qld/".concat(version, "/formio.full.min.js"),

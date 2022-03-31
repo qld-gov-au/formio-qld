@@ -52,7 +52,10 @@ __webpack_require__.r(__webpack_exports__);
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 var initFormioInstance = function initFormioInstance(formioElem, opts) {
-  if (formioElem.dataset.formUrl) return;
+  // if already initiated, reject
+  if (formioElem.dataset.formUrl) return; // if doesn't have required options, reject
+
+  if (!formioElem.dataset.envUrl || !formioElem.dataset.projectName || !formioElem.dataset.formName) return;
   var bodyContainer = $("body");
   var defaultRedirect = "contact-us/response/";
   /*
