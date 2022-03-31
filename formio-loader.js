@@ -9,10 +9,50 @@
 		root["FormioLoader"] = factory();
 })(self, function() {
 return /******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "initFormio": function() { return /* binding */ initFormio; },
+/* harmony export */   "initFormioInstance": function() { return /* binding */ initFormioInstance; }
+/* harmony export */ });
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 var initFormioInstance = function initFormioInstance(formioElem, opts) {
+  if (formioElem.dataset.formUrl) return;
   var bodyContainer = $("body");
   var defaultRedirect = "contact-us/response/";
   /*
@@ -24,10 +64,9 @@ var initFormioInstance = function initFormioInstance(formioElem, opts) {
   var submitBtn = $("#".concat(formioContainerId, " button[name='data[submit]']"));
   var formName = ""; // Check if value is true/exists and is numeric
 
-  if (opts.form_revision && $.isNumeric(opts.form_revision)) {
+  if (opts.form_revision) {
     formName = "".concat(opts.formName, "/v/").concat(opts.form_revision);
   } else {
-    console.info("Revision fallback for ".concat(formioContainerId));
     formName = opts.formName;
   }
 
@@ -132,12 +171,7 @@ var NamespacePolyfillPlugin = {
   }
 };
 
-window.onload = function () {
-  window.dataLayer = window.dataLayer || []; // Init form
-
-  Formio.icons = "fontawesome";
-  Formio.use(premium); // custom error message
-
+var customiseErrorMessage = function customiseErrorMessage() {
   var newFunc = Formio.Form.prototype.errorForm.bind({});
 
   Formio.Form.prototype.errorForm = function (err) {
@@ -147,13 +181,25 @@ window.onload = function () {
     }
 
     return newFunc(err);
-  }; // register plugin
+  };
+};
 
+var initFormio = function initFormio() {
+  window.dataLayer = window.dataLayer || []; // Init form
+
+  Formio.icons = "fontawesome";
+  if (premium) Formio.use(premium); // custom error message
+
+  customiseErrorMessage(); // register plugin
 
   Formio.registerPlugin(NamespacePolyfillPlugin, "namespacePolyfill");
   document.querySelectorAll("[data-formio]").forEach(function (formioElem) {
     initFormioInstance(formioElem, formioElem.dataset);
   });
+};
+
+window.onload = function () {
+  initFormio();
 }; // Persistent fix for iPhone/Safari
 
 
@@ -162,6 +208,8 @@ window.onpageshow = function (event) {
     window.location.reload();
   }
 };
+
+
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
