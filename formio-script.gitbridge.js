@@ -75,7 +75,7 @@ var scripts = [{
 }, // note: formio-loader should always load last
 {
   type: "script",
-  src: "https://www.qld.gov.au/__data/assets/git_bridge/0025/".concat(version, "/formio-loader.min.js"),
+  src: "https://www.qld.gov.au/__data/assets/git_bridge/0025/".concat(version, "/formio-loader.js"),
   async: false
 }, {
   type: "link",
