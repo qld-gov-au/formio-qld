@@ -43,11 +43,11 @@ var getDefaultScripts = function getDefaultScripts(_ref2) {
     src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio-loader.js"),
     async: false
   }, {
-    type: "style",
+    type: "link",
     href: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio.full.min.css"),
     rel: "stylesheet"
   }, {
-    type: "style",
+    type: "link",
     href: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/premium.css"),
     rel: "stylesheet"
   }, {
@@ -77,11 +77,11 @@ var scripts = [{
   src: "https://static.qgov.net.au/formio-qld/".concat(version, "/formio-loader.min.js"),
   async: false
 }, {
-  type: "style",
+  type: "link",
   href: "https://static.qgov.net.au/formio-qld/".concat(version, "/formio.full.min.css"),
   rel: "stylesheet"
 }, {
-  type: "style",
+  type: "link",
   href: "https://static.qgov.net.au/formio-qld/".concat(version, "/premium.css"),
   rel: "stylesheet"
 }, {
