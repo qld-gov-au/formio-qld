@@ -221,10 +221,7 @@ var initFormio = function initFormio() {
   });
 };
 
-window.onload = function () {
-  initFormio();
-}; // Persistent fix for iPhone/Safari
-
+initFormio(); // Persistent fix for iPhone/Safari
 
 window.onpageshow = function (event) {
   if (event.persisted) {
