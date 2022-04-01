@@ -3,6 +3,7 @@
 var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/index.js
+var defaultVersion = window.formioQldCdnVersion || "v1/v1.x.x-latest";
 var createScripts = function createScripts(scripts) {
   scripts.forEach(function (_ref) {
     var type = _ref.type,
@@ -24,7 +25,7 @@ var createScripts = function createScripts(scripts) {
 var getDefaultScripts = function getDefaultScripts(_ref2) {
   var subdomain = _ref2.subdomain,
       _ref2$version = _ref2.version,
-      version = _ref2$version === void 0 ? "v1/v1.x.x-latest" : _ref2$version;
+      version = _ref2$version === void 0 ? defaultVersion : _ref2$version;
   return [{
     type: "script",
     src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio.full.js"),
@@ -59,8 +60,7 @@ var getDefaultScripts = function getDefaultScripts(_ref2) {
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/scriptStaging.js
 
 var scripts = getDefaultScripts({
-  subdomain: "beta-static",
-  version: window.formioQldCdnVersion
+  subdomain: "beta-static"
 });
 createScripts(scripts);
 /******/ })()

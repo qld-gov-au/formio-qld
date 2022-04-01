@@ -3,6 +3,7 @@
 var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/index.js
+var defaultVersion = window.formioQldCdnVersion || "v1/v1.x.x-latest";
 var createScripts = function createScripts(scripts) {
   scripts.forEach(function (_ref) {
     var type = _ref.type,
@@ -24,7 +25,7 @@ var createScripts = function createScripts(scripts) {
 var getDefaultScripts = function getDefaultScripts(_ref2) {
   var subdomain = _ref2.subdomain,
       _ref2$version = _ref2.version,
-      version = _ref2$version === void 0 ? "v1/v1.x.x-latest" : _ref2$version;
+      version = _ref2$version === void 0 ? defaultVersion : _ref2$version;
   return [{
     type: "script",
     src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio.full.js"),
@@ -58,35 +59,34 @@ var getDefaultScripts = function getDefaultScripts(_ref2) {
 };
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/scriptProd.js
 
-var version = window.formioQldCdnVersion || "v1/v1.x.x-latest";
 var scripts = [{
   type: "script",
-  src: "https://static.qgov.net.au/formio-qld/".concat(version, "/formio.full.min.js"),
+  src: "https://static.qgov.net.au/formio-qld/".concat(defaultVersion, "/formio.full.min.js"),
   async: false
 }, {
   type: "script",
-  src: "https://static.qgov.net.au/formio-qld/".concat(version, "/premium.min.js"),
+  src: "https://static.qgov.net.au/formio-qld/".concat(defaultVersion, "/premium.min.js"),
   async: false
 }, {
   type: "script",
-  src: "https://static.qgov.net.au/formio-qld/".concat(version, "/formio-qld.min.js"),
+  src: "https://static.qgov.net.au/formio-qld/".concat(defaultVersion, "/formio-qld.min.js"),
   async: false
 }, // note: formio-loader should always load last
 {
   type: "script",
-  src: "https://static.qgov.net.au/formio-qld/".concat(version, "/formio-loader.min.js"),
+  src: "https://static.qgov.net.au/formio-qld/".concat(defaultVersion, "/formio-loader.min.js"),
   async: false
 }, {
   type: "link",
-  href: "https://static.qgov.net.au/formio-qld/".concat(version, "/formio.full.min.css"),
+  href: "https://static.qgov.net.au/formio-qld/".concat(defaultVersion, "/formio.full.min.css"),
   rel: "stylesheet"
 }, {
   type: "link",
-  href: "https://static.qgov.net.au/formio-qld/".concat(version, "/premium.css"),
+  href: "https://static.qgov.net.au/formio-qld/".concat(defaultVersion, "/premium.css"),
   rel: "stylesheet"
 }, {
   type: "link",
-  href: "https://dev-static.qgov.net.au/formio-qld/".concat(version, "/formio-qld.min.css"),
+  href: "https://dev-static.qgov.net.au/formio-qld/".concat(defaultVersion, "/formio-qld.min.css"),
   rel: "stylesheet"
 }];
 createScripts(scripts);
