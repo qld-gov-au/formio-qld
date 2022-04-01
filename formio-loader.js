@@ -53,9 +53,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
 var initFormioInstance = function initFormioInstance(formioElem, opts) {
   // if already initiated, reject
-  if (formioElem.dataset.formUrl) return; // if doesn't have required options, reject
+  if (formioElem.dataset.formioFormUrl) return; // if doesn't have required options, reject
 
-  if (!formioElem.dataset.envUrl || !formioElem.dataset.projectName || !formioElem.dataset.formName) return;
+  if (!opts.envUrl || !opts.projectName || !opts.formName) {
+    console.warn("Require envUrl, projectName, formName to initiate the form.", opts);
+    return;
+  }
+
   var bodyContainer = $("body");
   var defaultRedirect = "contact-us/response/";
   /*
@@ -87,7 +91,7 @@ var initFormioInstance = function initFormioInstance(formioElem, opts) {
     namespace: namespace
   });
   formioElem.dataset.formio = JSON.stringify(formio);
-  formioElem.dataset.formUrl = formUrl;
+  formioElem.dataset.formioFormUrl = formUrl;
   /*
    * load formio form
    */
@@ -197,7 +201,23 @@ var initFormio = function initFormio() {
 
   Formio.registerPlugin(NamespacePolyfillPlugin, "namespacePolyfill");
   document.querySelectorAll("[data-formio]").forEach(function (formioElem) {
-    initFormioInstance(formioElem, formioElem.dataset);
+    var _formioElem$dataset = formioElem.dataset,
+        formioProjectName = _formioElem$dataset.formioProjectName,
+        formioFormName = _formioElem$dataset.formioFormName,
+        formioEnvUrl = _formioElem$dataset.formioEnvUrl,
+        formioPdfDownload = _formioElem$dataset.formioPdfDownload,
+        formioFormConfirmation = _formioElem$dataset.formioFormConfirmation,
+        formioFormRevision = _formioElem$dataset.formioFormRevision,
+        formioNamespace = _formioElem$dataset.formioNamespace;
+    initFormioInstance(formioElem, {
+      projectName: formioProjectName,
+      formName: formioFormName,
+      envUrl: formioEnvUrl,
+      pdfDownload: formioPdfDownload,
+      formConfirmation: formioFormConfirmation,
+      formRevision: formioFormRevision,
+      namespace: formioNamespace
+    });
   });
 };
 
