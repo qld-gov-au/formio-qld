@@ -74,6 +74,14 @@ const getDefaultScripts = ({
     rel: "stylesheet"
   }];
 };
+const initScript = scripts => {
+  if (window.formioScriptLoaded) {
+    if (FormioLoader) FormioLoader.initFormio();
+  } else {
+    window.formioScriptLoaded = true;
+    createScripts(scripts);
+  }
+};
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/scriptGitBridge.js
 
 const version = window.formioQldCdnVersion || "248740";
@@ -107,6 +115,6 @@ const scripts = [{
   href: `https://www.qld.gov.au/__data/assets/git_bridge/0025/${version}/formio-qld.min.css`,
   rel: "stylesheet"
 }];
-createScripts(scripts);
+initScript(scripts);
 /******/ })()
 ;

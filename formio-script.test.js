@@ -74,11 +74,19 @@ const getDefaultScripts = ({
     rel: "stylesheet"
   }];
 };
+const initScript = scripts => {
+  if (window.formioScriptLoaded) {
+    if (FormioLoader) FormioLoader.initFormio();
+  } else {
+    window.formioScriptLoaded = true;
+    createScripts(scripts);
+  }
+};
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/scriptTest.js
 
 const scripts = getDefaultScripts({
   subdomain: "test-static"
 });
-createScripts(scripts);
+initScript(scripts);
 /******/ })()
 ;

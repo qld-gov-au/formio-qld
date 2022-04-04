@@ -74,6 +74,14 @@ const getDefaultScripts = ({
     rel: "stylesheet"
   }];
 };
+const initScript = scripts => {
+  if (window.formioScriptLoaded) {
+    if (FormioLoader) FormioLoader.initFormio();
+  } else {
+    window.formioScriptLoaded = true;
+    createScripts(scripts);
+  }
+};
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/scriptProd.js
 
 const scripts = [{
@@ -106,6 +114,6 @@ const scripts = [{
   href: `https://dev-static.qgov.net.au/formio-qld/${defaultVersion}/formio-qld.min.css`,
   rel: "stylesheet"
 }];
-createScripts(scripts);
+initScript(scripts);
 /******/ })()
 ;
