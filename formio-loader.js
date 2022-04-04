@@ -222,9 +222,8 @@ const initFormio = () => {
       namespace: formioNamespace
     });
   });
-};
+}; // Persistent fix for iPhone/Safari
 
-initFormio(); // Persistent fix for iPhone/Safari
 
 window.onpageshow = event => {
   if (event.persisted) {
