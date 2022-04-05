@@ -5,7 +5,11 @@ var __webpack_exports__ = {};
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/index.js
 const defaultVersion = window.formioQldCdnVersion || "v1/v1.x.x-latest";
 const createScripts = (scripts, i = 0) => {
-  if (i > scripts.length - 1) return;
+  if (i > scripts.length - 1) {
+    FormioLoader.initFormio();
+    return;
+  }
+
   const {
     type,
     async,
@@ -22,7 +26,11 @@ const createScripts = (scripts, i = 0) => {
       if (href !== undefined) elem.setAttribute("href", href);
       if (rel !== undefined) elem.setAttribute("rel", rel);
       document.body.appendChild(elem);
-      elem.onload = resolve;
+
+      elem.onload = () => {
+        console.info("FormioScript loaded:", src || href);
+        resolve();
+      };
     });
     promise.then(() => {
       createScripts(scripts, i + 1);
@@ -66,6 +74,14 @@ const getDefaultScripts = ({
     rel: "stylesheet"
   }];
 };
+const initScript = scripts => {
+  if (window.formioScriptLoaded) {
+    if (typeof FormioLoader !== "undefined") FormioLoader.initFormio();
+  } else {
+    window.formioScriptLoaded = true;
+    createScripts(scripts);
+  }
+};
 ;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/scriptProd.js
 
 const scripts = [{
@@ -98,6 +114,6 @@ const scripts = [{
   href: `https://dev-static.qgov.net.au/formio-qld/${defaultVersion}/formio-qld.min.css`,
   rel: "stylesheet"
 }];
-createScripts(scripts);
+initScript(scripts);
 /******/ })()
 ;

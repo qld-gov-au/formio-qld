@@ -9,11 +9,68 @@
 		root["FormioLoader"] = factory();
 })(globalThis, function() {
 return /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	// The require scope
-/******/ 	var __webpack_require__ = {};
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 283:
+/***/ ((module) => {
+
+module.exports = {
+  // Turn off default buttons
+  buttonSettings: {
+    showCancel: false,
+    showPrevious: false,
+    showNext: false,
+    showSubmit: false
+  },
+  i18n: {
+    en: {
+      pattern: "Must use the format shown",
+      error: '<h2><span class="fa fa-exclamation-triangle"></span> Please check your answers</h2>'
+    }
+  }
+};
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -44,11 +101,18 @@ return /******/ (() => { // webpackBootstrap
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "initFormio": () => (/* binding */ initFormio),
 /* harmony export */   "initFormioInstance": () => (/* binding */ initFormioInstance)
 /* harmony export */ });
+/* harmony import */ var _options_createForm_options__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(283);
+/* harmony import */ var _options_createForm_options__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_options_createForm_options__WEBPACK_IMPORTED_MODULE_0__);
+
+
 const initFormioInstance = (formioElem, opts) => {
   // if already initiated, reject
   if (formioElem.dataset.formioFormUrl) return; // if doesn't have required options, reject
@@ -97,19 +161,7 @@ const initFormioInstance = (formioElem, opts) => {
    */
 
   Formio.createForm(formioElem, formUrl, // form,
-  {
-    // Turn off default buttons
-    buttonSettings: {
-      showCancel: false,
-      showPrevious: false,
-      showNext: false,
-      showSubmit: false
-    },
-    i18n: {
-      en: {
-        pattern: "Must use the format shown"
-      }
-    },
+  { ...(_options_createForm_options__WEBPACK_IMPORTED_MODULE_0___default()),
     formio,
     namespace: formio.options.namespace
   }).then(wizard => {
@@ -222,9 +274,8 @@ const initFormio = () => {
       namespace: formioNamespace
     });
   });
-};
+}; // Persistent fix for iPhone/Safari
 
-initFormio(); // Persistent fix for iPhone/Safari
 
 window.onpageshow = event => {
   if (event.persisted) {
@@ -232,6 +283,8 @@ window.onpageshow = event => {
   }
 };
 
+
+})();
 
 /******/ 	return __webpack_exports__;
 /******/ })()
