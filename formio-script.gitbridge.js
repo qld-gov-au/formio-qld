@@ -76,7 +76,9 @@ const getDefaultScripts = ({
 };
 const initScript = scripts => {
   if (window.formioScriptLoaded) {
-    if (typeof FormioLoader !== "undefined") FormioLoader.initFormio();
+    if (typeof FormioLoader !== "undefined") setTimeout(() => {
+      FormioLoader.initFormio();
+    });
   } else {
     window.formioScriptLoaded = true;
     createScripts(scripts);
