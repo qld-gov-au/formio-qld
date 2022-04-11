@@ -168,7 +168,8 @@ const initFormioInstance = (formioElem, opts) => {
       envUrl: opts.envUrl,
       projectName: opts.projectName,
       formName: opts.formName,
-      defaultOptions
+      defaultOptions,
+      elem: formioElem
     }))
   };
   Formio.createForm(formioElem, formUrl, combinedOptions).then(wizard => {
@@ -221,7 +222,8 @@ const initFormioInstance = (formioElem, opts) => {
         envUrl: opts.envUrl,
         projectName: opts.projectName,
         formName: opts.formName,
-        form: wizard
+        form: wizard,
+        elem: formioElem
       });
     }
   });
