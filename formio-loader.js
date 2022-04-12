@@ -111,7 +111,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _options_createForm_options__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(283);
 /* harmony import */ var _options_createForm_options__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_options_createForm_options__WEBPACK_IMPORTED_MODULE_0__);
+ // polyfill plugin function to fix the namespace option doesn't pass to Formio.makeRequest
 
+const NamespacePlugin = {
+  priority: 0,
+
+  preRequest(requestArgs) {
+    if (requestArgs.formio) {
+      const formioInstance = document.querySelector(`[data-formio-form-url="${requestArgs.formio.formUrl}"]`);
+
+      if (formioInstance) {
+        requestArgs.formio = JSON.parse(formioInstance.dataset.formio);
+        requestArgs.opts.formio = requestArgs.formio;
+      }
+
+      if (requestArgs.formio.options) requestArgs.opts.namespace = requestArgs.formio.options.namespace;
+    }
+
+    return Promise.resolve(null);
+  }
+
+};
 
 const initFormioInstance = (formioElem, opts) => {
   // if already initiated, reject
@@ -171,7 +191,9 @@ const initFormioInstance = (formioElem, opts) => {
       defaultOptions,
       elem: formioElem
     }))
-  };
+  }; // register plugin
+
+  if (!Formio.getPlugin("namespacePolyfill")) Formio.registerPlugin(NamespacePlugin, "namespacePolyfill");
   Formio.createForm(formioElem, formUrl, combinedOptions).then(wizard => {
     wizard.formio = formio;
     wizard.options.formio = formio; // eslint-disable-next-line no-underscore-dangle
@@ -227,27 +249,6 @@ const initFormioInstance = (formioElem, opts) => {
       });
     }
   });
-}; // polyfill plugin function to fix the namespace option doesn't pass to Formio.makeRequest
-
-
-const NamespacePlugin = {
-  priority: 0,
-
-  preRequest(requestArgs) {
-    if (requestArgs.formio) {
-      const formioInstance = document.querySelector(`[data-form-url="${requestArgs.formio.formUrl}"]`);
-
-      if (formioInstance) {
-        requestArgs.formio = JSON.parse(formioInstance.dataset.formio);
-        requestArgs.opts.formio = requestArgs.formio;
-      }
-
-      if (requestArgs.formio.options) requestArgs.opts.namespace = requestArgs.formio.options.namespace;
-    }
-
-    return Promise.resolve(null);
-  }
-
 };
 
 const customiseErrorMessage = () => {
@@ -269,9 +270,7 @@ const initFormio = () => {
   Formio.icons = "fontawesome";
   if (premium) Formio.use(premium); // custom error message
 
-  customiseErrorMessage(); // register plugin
-
-  Formio.registerPlugin(NamespacePlugin, "namespacePolyfill");
+  customiseErrorMessage();
   document.querySelectorAll("[data-formio]").forEach(formioElem => {
     const {
       formioProjectName,
