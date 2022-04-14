@@ -411,7 +411,7 @@ return /******/ (() => { // webpackBootstrap
 
 /***/ }),
 
-/***/ 384:
+/***/ 596:
 /***/ ((module) => {
 
 module.exports = {
@@ -17751,8 +17751,8 @@ __webpack_require__.d(bootstrap_namespaceObject, {
   "plsPlusAddress": () => (plsPlusAddress)
 });
 
-// EXTERNAL MODULE: ./src/options/build.options.js
-var build_options = __webpack_require__(384);
+// EXTERNAL MODULE: ./src/config/build.options.js
+var build_options = __webpack_require__(596);
 var build_options_default = /*#__PURE__*/__webpack_require__.n(build_options);
 ;// CONCATENATED MODULE: ./src/utils/getComponents.js
 const getComponents = components => {

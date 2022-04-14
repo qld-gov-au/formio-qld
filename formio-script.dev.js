@@ -52,7 +52,7 @@ __webpack_require__.d(__webpack_exports__, {
   "init": () => (/* binding */ init)
 });
 
-;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/index.js
+;// CONCATENATED MODULE: ./src/helpers/FormioScript/FormioScript.js
 const defaultVersion = window.formioQldCdnVersion || "v1/v1.x.x-latest";
 const createScripts = (scripts, i, mainResolve) => {
   if (i > scripts.length - 1) {
@@ -137,7 +137,9 @@ const initScript = scripts => new Promise(resolve => {
     createScripts(scripts, 0, resolve);
   }
 });
-;// CONCATENATED MODULE: ./src/matrixHelpers/FormioScript/scriptDev.js
+;// CONCATENATED MODULE: ./src/helpers/FormioScript/index.js
+
+;// CONCATENATED MODULE: ./src/helpers/FormioScript/index.dev.js
 
 const scripts = getDefaultScripts({
   subdomain: "dev-static"
