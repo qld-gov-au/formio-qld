@@ -279,6 +279,7 @@ const initFormio = () => {
   if (premium) Formio.use(premium); // custom error message
 
   customiseErrorMessage();
+  if (window.onFormioLoaded) window.onFormioLoaded();
   document.querySelectorAll("[data-formio]").forEach(elem => {
     const {
       formioProjectName,
