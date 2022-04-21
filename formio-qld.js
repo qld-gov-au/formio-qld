@@ -7,7 +7,7 @@
 		exports["FormioQld"] = factory();
 	else
 		root["FormioQld"] = factory();
-})(globalThis, () => {
+})(globalThis, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
