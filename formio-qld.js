@@ -17739,7 +17739,6 @@ __webpack_require__.r(__webpack_exports__);
 var components_namespaceObject = {};
 __webpack_require__.r(components_namespaceObject);
 __webpack_require__.d(components_namespaceObject, {
-  "CustomAddress": () => (CustomAddress),
   "CustomHeader": () => (CustomHeader),
   "CustomTextfield": () => (CustomTextfield),
   "PlsPlusAddress": () => (PlsPlusAddress)
@@ -18043,10 +18042,7 @@ class PlsPlusAddress extends ContainerComponent {
       // as a solution `tree: true` need to define here instead
       // https://github.com/formio/formio.js/blob/master/src/utils/formUtils.js#L89-L90
       schema: { ...PlsPlusAddress.schema(),
-        tree: true,
-        input: true,
-        persistent: true,
-        protected: false
+        tree: true
       }
     };
   }
@@ -18271,8 +18267,8 @@ class PlsPlusAddress extends ContainerComponent {
         this.dataValue.address.selectedAddress = this.composedAddress;
         return super.onChange(flags, fromRoot);
       };
-    }); // this.component.validate.required = !this.manualMode;
-
+    });
+    this.component.validate.required = !this.manualMode;
     return this.renderTemplate(this.templateName, {
       children: this.hasChildren ? this.renderComponents() : "",
       nestedKey: this.nestedKey,
@@ -18530,35 +18526,7 @@ class PlsPlusAddress extends ContainerComponent {
 PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/PlsPlusAddress/index.js
 
-;// CONCATENATED MODULE: ./src/components/CustomAddress/CustomAddress.js
-const AddressComponent = Formio.Components.components.address;
-class CustomAddress extends AddressComponent {
-  /**
-   * Define the default schema to change the type and tag and label.
-   */
-  static schema(...extend) {
-    return AddressComponent.schema({
-      label: "CustomAddress",
-      type: "customaddress"
-    }, ...extend);
-  }
-
-  static get builderInfo() {
-    return {
-      title: "CustomAddress",
-      group: "custom",
-      icon: "terminal",
-      weight: 2,
-      documentation: "/userguide/#html-element-component",
-      schema: CustomAddress.schema()
-    };
-  }
-
-}
-;// CONCATENATED MODULE: ./src/components/CustomAddress/index.js
-
 ;// CONCATENATED MODULE: ./src/components/index.js
-
 
 
 
