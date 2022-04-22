@@ -144,7 +144,9 @@ var createForm_options_default = /*#__PURE__*/__webpack_require__.n(createForm_o
       });
     }
   });
-  form.on("submitDone", () => {
+  form.on("submitDone", submissionData => {
+    console.log(submissionData);
+    console.log(submissionData.metadata.PostToAPIGateway.DownloadUrl);
     if (formConfirmation) window.location.href = formConfirmation;
   });
 });
