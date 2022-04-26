@@ -17941,6 +17941,7 @@ const addressValidation = {
   customMessage: "You have exceeded the character limit or included html or special characters, e.g. <,>,{,},\\",
   maxLength: 40
 };
+const addressKeys = ["autocompleteAddress", "selectedAddress", "mode", "address1", "address2", "address3", "city", "state", "postcode"];
 class PlsPlusAddress extends FieldsetComponent {
   constructor(...args) {
     super(...args);
@@ -17950,7 +17951,7 @@ class PlsPlusAddress extends FieldsetComponent {
   static schema(...extend) {
     return FieldsetComponent.schema({
       type: "plsplusaddress",
-      label: "Address",
+      label: "PlsPlus Address",
       key: "plsplusaddress",
       switchToManualModeLabel: "Can't find address? Switch to manual mode.",
       providerOptions: {},
@@ -17960,27 +17961,30 @@ class PlsPlusAddress extends FieldsetComponent {
       input: true,
       persistent: "client-only",
       components: [{
-        key: "address",
+        key: "addressData",
         type: "container",
+        label: "Address data",
+        tableView: true,
+        tags: ["container"],
         components: [{
           label: "Autocomplete address",
-          tableView: false,
           key: "autocompleteAddress",
+          tags: ["autocompleteAddress"],
           type: "hidden"
         }, {
           label: "Selected address",
-          tableView: false,
           key: "selectedAddress",
+          tags: ["selectedAddress"],
           type: "hidden"
         }, {
           label: "Mode",
-          tableView: false,
           key: "mode",
+          tags: ["mode"],
           type: "hidden"
         }, {
           label: "Address line 1 <i>(include unit number if needed)</i>",
-          tableView: false,
           key: "address1",
+          tags: ["address1"],
           type: "textfield",
           input: true,
           validate: {
@@ -17989,22 +17993,22 @@ class PlsPlusAddress extends FieldsetComponent {
           }
         }, {
           label: "Address line 2",
-          tableView: false,
           key: "address2",
+          tags: ["address2"],
           type: "textfield",
           input: true,
           validate: addressValidation
         }, {
           label: "Address line 3",
-          tableView: false,
           key: "address3",
+          tags: ["address3"],
           type: "textfield",
           input: true,
           validate: addressValidation
         }, {
           label: "Town, City or Suburb",
-          tableView: false,
           key: "city",
+          tags: ["city"],
           type: "textfield",
           input: true,
           validate: {
@@ -18013,16 +18017,16 @@ class PlsPlusAddress extends FieldsetComponent {
           }
         }, {
           label: "State",
-          tableView: false,
           key: "state",
+          tags: ["state"],
           type: "textfield",
           input: true,
           disabled: true,
           defaultValue: "QLD"
         }, {
           label: "Postcode",
-          tableView: false,
           key: "postcode",
+          tags: ["postcode"],
           type: "textfield",
           input: true,
           inputMask: "9999",
@@ -18094,8 +18098,8 @@ class PlsPlusAddress extends FieldsetComponent {
 
   onChange(flags, fromRoot) {
     if (this.autocompleteMode) {
-      if (this.address) this.address.selectedAddress = this.address.autocompleteAddress;
-    } else if (this.address) this.address.selectedAddress = this.composedAddress;
+      if (this.address) this.setAddressProp("selectedAddress", this.address.autocompleteAddress);
+    } else if (this.address) this.setAddressProp("selectedAddress", this.composedAddress);
 
     return super.onChange(flags, fromRoot);
   }
@@ -18133,15 +18137,11 @@ class PlsPlusAddress extends FieldsetComponent {
       return PlsPlusAddressMode.Autocomplete;
     }
 
-    return this.address?.mode || PlsPlusAddressMode.Autocomplete;
+    return this.address.mode || PlsPlusAddressMode.Autocomplete;
   }
 
   set mode(value) {
-    this.address.mode = value;
-
-    if (this.manualModeEnabled) {
-      this.onChange();
-    }
+    this.setAddressProp("mode", value);
   }
 
   get emptyValue() {
@@ -18173,22 +18173,54 @@ class PlsPlusAddress extends FieldsetComponent {
   }
 
   get container() {
-    return this.getComponents()[0];
+    return this.getComponents().find(comp => comp.originalComponent.tags?.includes("container"));
   }
 
   get address() {
-    return this.container?.dataValue;
+    const dataValue = this.container?.dataValue;
+    const addressData = addressKeys.map(k => {
+      if (this.container) {
+        const componentKey = this.container.getComponents().find(comp => comp.originalComponent.tags?.includes(k))?.component.key;
+        return {
+          [k]: dataValue[componentKey]
+        };
+      }
+
+      return {};
+    });
+    return Object.assign({}, ...addressData);
   }
 
   set address(value) {
-    this.container.dataValue = value;
     this.dataValue = value;
-    this.onChange();
+    let changed = false;
+
+    if (this.container) {
+      addressKeys.forEach(k => {
+        const componentKey = this.container.getComponents().find(comp => comp.originalComponent.tags?.includes(k))?.component.key;
+
+        if (this.container.dataValue[componentKey] !== value[k]) {
+          this.container.dataValue[componentKey] = value[k];
+          changed = true;
+        }
+      });
+    }
+
+    if (changed) this.onChange({
+      modified: true
+    });
+  }
+
+  setAddressProp(prop, value) {
+    if (this.address[prop] === value) return;
+    this.address = { ...this.address,
+      [prop]: value
+    };
   }
 
   restoreComponentsContext() {
-    this.container.getComponents().forEach(component => {
-      component.data = this.address;
+    this.container?.getComponents().forEach(component => {
+      component.data = this.container.dataValue;
       component.setValue(component.dataValue, {
         noUpdateEvent: true
       });
@@ -18270,8 +18302,11 @@ class PlsPlusAddress extends FieldsetComponent {
       }
 
       component.onChange = (flags, fromRoot) => {
-        this.address.selectedAddress = this.composedAddress;
-        return super.onChange(flags, fromRoot);
+        if (flags.modified && component.originalComponent.tags.length) {
+          this.setAddressProp(component.originalComponent.tags[0], component.dataValue);
+        }
+
+        return this.onChange(flags, fromRoot);
       };
     });
 
@@ -18306,7 +18341,7 @@ class PlsPlusAddress extends FieldsetComponent {
   }
 
   onSelectAddress(address, element, index) {
-    this.address.autocompleteAddress = address;
+    this.setAddressProp("autocompleteAddress", address);
 
     if (element) {
       element.value = this.getDisplayValue(this.address);
@@ -18448,7 +18483,7 @@ class PlsPlusAddress extends FieldsetComponent {
       element.value = "";
     }
 
-    this.container.getComponents().forEach(component => {
+    this.container?.getComponents().forEach(component => {
       const childElement = document.getElementById(`${component.id}-${component.component.key}`);
       if (childElement) childElement.value = component.dataValue;
     });
