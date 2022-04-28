@@ -17739,8 +17739,6 @@ __webpack_require__.r(__webpack_exports__);
 var components_namespaceObject = {};
 __webpack_require__.r(components_namespaceObject);
 __webpack_require__.d(components_namespaceObject, {
-  "CustomHeader": () => (CustomHeader),
-  "CustomTextfield": () => (CustomTextfield),
   "PlsPlusAddress": () => (PlsPlusAddress)
 });
 
@@ -17763,61 +17761,6 @@ const getComponents = components => {
   });
   return customComponents;
 };
-;// CONCATENATED MODULE: ./src/components/CustomHeader/CustomHeader.js
-const HTMLComponent = Formio.Components.components.htmlelement;
-class CustomHeader extends HTMLComponent {
-  /**
-   * Define the default schema to change the type and tag and label.
-   */
-  static schema(...extend) {
-    return HTMLComponent.schema({
-      label: "CustomHeader",
-      type: "customheader",
-      tag: "h1"
-    }, ...extend);
-  }
-
-  static get builderInfo() {
-    return {
-      title: "CustomHeader",
-      group: "custom",
-      icon: "code",
-      weight: 2,
-      documentation: "/userguide/#html-element-component",
-      schema: CustomHeader.schema()
-    };
-  }
-
-}
-;// CONCATENATED MODULE: ./src/components/CustomHeader/index.js
-
-;// CONCATENATED MODULE: ./src/components/CustomTextfield/CustomTextfield.js
-const TextfieldComponent = Formio.Components.components.textfield;
-class CustomTextfield extends TextfieldComponent {
-  /**
-   * Define the default schema to change the type and tag and label.
-   */
-  static schema(...extend) {
-    return TextfieldComponent.schema({
-      label: "CustomTextfield",
-      type: "customtextfield"
-    }, ...extend);
-  }
-
-  static get builderInfo() {
-    return {
-      title: "CustomTextfield",
-      group: "custom",
-      icon: "terminal",
-      weight: 2,
-      documentation: "/userguide/#html-element-component",
-      schema: CustomTextfield.schema()
-    };
-  }
-
-}
-;// CONCATENATED MODULE: ./src/components/CustomTextfield/index.js
-
 // EXTERNAL MODULE: ./node_modules/autocompleter/autocomplete.js
 var autocomplete = __webpack_require__(338);
 var autocomplete_default = /*#__PURE__*/__webpack_require__.n(autocomplete);
@@ -17922,14 +17865,15 @@ const baseEditForm = Formio.Components.components.base.editForm;
 /*
  * use form.io Address component as boilerplate
  * https://github.com/formio/formio.js/blob/master/src/components/address/Address.js
+ * need to extend from `container` to `fieldset` due to Formio app upgrade from 7.1.2 to 7.3.0
+ * otherwise component data will get erase when submitted to the server
  *
  */
 
 
 
-const ContainerComponent = Formio.Components.components.container;
+const FieldsetComponent = Formio.Components.components.fieldset;
 const Field = Formio.Components.components.field;
-const NestedComponent = Formio.Components.components.nested;
 const PlsPlusAddressMode = {
   Autocomplete: "autocomplete",
   Manual: "manual"
@@ -17940,92 +17884,103 @@ const addressValidation = {
   customMessage: "You have exceeded the character limit or included html or special characters, e.g. <,>,{,},\\",
   maxLength: 40
 };
-class PlsPlusAddress extends ContainerComponent {
+const addressKeys = ["autocompleteAddress", "selectedAddress", "mode", "address1", "address2", "address3", "city", "state", "postcode"];
+class PlsPlusAddress extends FieldsetComponent {
+  constructor(...args) {
+    super(...args);
+    this.noField = false;
+  }
+
   static schema(...extend) {
-    return ContainerComponent.schema({
+    return FieldsetComponent.schema({
       type: "plsplusaddress",
-      label: "Address",
-      key: "address",
+      label: "PlsPlus Address",
+      key: "plsplusaddress",
       switchToManualModeLabel: "Can't find address? Switch to manual mode.",
       providerOptions: {},
-      manualModeViewString: "",
       hideLabel: false,
       disableClearIcon: false,
       enableManualMode: true,
+      input: true,
+      persistent: "client-only",
       components: [{
-        label: "Autocomplete address",
-        persistent: false,
-        tableView: false,
-        key: "autocompleteAddress",
-        type: "hidden"
-      }, {
-        label: "Selected address",
-        persistent: false,
-        tableView: false,
-        key: "selectedAddress",
-        type: "hidden"
-      }, {
-        label: "Address line 1 <i>(include unit number if needed)</i>",
-        persistent: false,
-        tableView: false,
-        key: "address1",
-        type: "textfield",
-        input: true,
-        validate: {
-          required: true,
-          ...addressValidation
-        }
-      }, {
-        label: "Address line 2",
-        persistent: false,
-        tableView: false,
-        key: "address2",
-        type: "textfield",
-        input: true,
-        validate: addressValidation
-      }, {
-        label: "Address line 3",
-        persistent: false,
-        tableView: false,
-        key: "address3",
-        type: "textfield",
-        input: true,
-        validate: addressValidation
-      }, {
-        label: "Town, City or Suburb",
-        persistent: false,
-        tableView: false,
-        key: "city",
-        type: "textfield",
-        input: true,
-        validate: {
-          required: true,
-          ...addressValidation
-        }
-      }, {
-        label: "State",
-        persistent: false,
-        tableView: false,
-        key: "state",
-        type: "textfield",
-        input: true,
-        disabled: true,
-        defaultValue: "QLD"
-      }, {
-        label: "Postcode",
-        persistent: false,
-        tableView: false,
-        key: "postcode",
-        type: "textfield",
-        input: true,
-        inputMask: "9999",
-        validate: {
-          required: true,
-          pattern: "^([0-9]{4})$",
-          customMessage: "Invalid postcode format",
-          minLength: 4,
-          maxLength: 4
-        }
+        key: "addressData",
+        type: "container",
+        label: "Address data",
+        tableView: true,
+        tags: ["container"],
+        components: [{
+          label: "Autocomplete address",
+          key: "autocompleteAddress",
+          tags: ["autocompleteAddress"],
+          type: "hidden"
+        }, {
+          label: "Selected address",
+          key: "selectedAddress",
+          tags: ["selectedAddress"],
+          type: "hidden"
+        }, {
+          label: "Mode",
+          key: "mode",
+          tags: ["mode"],
+          type: "hidden"
+        }, {
+          label: "Address line 1 <i>(include unit number if needed)</i>",
+          key: "address1",
+          tags: ["address1"],
+          type: "textfield",
+          input: true,
+          validate: {
+            required: true,
+            ...addressValidation
+          }
+        }, {
+          label: "Address line 2",
+          key: "address2",
+          tags: ["address2"],
+          type: "textfield",
+          input: true,
+          validate: addressValidation
+        }, {
+          label: "Address line 3",
+          key: "address3",
+          tags: ["address3"],
+          type: "textfield",
+          input: true,
+          validate: addressValidation
+        }, {
+          label: "Town, City or Suburb",
+          key: "city",
+          tags: ["city"],
+          type: "textfield",
+          input: true,
+          validate: {
+            required: true,
+            ...addressValidation
+          }
+        }, {
+          label: "State",
+          key: "state",
+          tags: ["state"],
+          type: "textfield",
+          input: true,
+          disabled: true,
+          defaultValue: "QLD"
+        }, {
+          label: "Postcode",
+          key: "postcode",
+          tags: ["postcode"],
+          type: "textfield",
+          input: true,
+          inputMask: "9999",
+          validate: {
+            required: true,
+            pattern: "^([0-9]{4})$",
+            customMessage: "Invalid postcode format",
+            minLength: 4,
+            maxLength: 4
+          }
+        }]
       }]
     }, ...extend);
   }
@@ -18037,14 +17992,22 @@ class PlsPlusAddress extends ContainerComponent {
       icon: "home",
       documentation: "/userguide/#address",
       weight: 2,
-      // this is the tricky bit to get exception on duplicated keys in children components that belong to different nested components
-      // `tree: true` is needed for the exception, if it is defined in the schema, it will not pass to the submission data because it will fail the isDirty test (comparing defaultSchema and builder schema)
-      // as a solution `tree: true` need to define here instead
-      // https://github.com/formio/formio.js/blob/master/src/utils/formUtils.js#L89-L90
-      schema: { ...PlsPlusAddress.schema(),
-        tree: true
+      schema: { ...PlsPlusAddress.schema()
       }
     };
+  }
+
+  getComponents() {
+    return this.components || [];
+  }
+
+  addComponents(data = this.data, options = this.options) {
+    if (options.components) {
+      this.components = options.components;
+    } else {
+      const components = this.hook("addComponents", lodash_default().defaultsDeep(this.componentComponents, this.defaultSchema.components), this) || [];
+      components.forEach(component => this.addComponent(component, data));
+    }
   }
 
   mergeSchema(component = {}) {
@@ -18057,6 +18020,11 @@ class PlsPlusAddress extends ContainerComponent {
     }
 
     return lodash_default().defaultsDeep(component, defaultSchema);
+  }
+
+  get defaultSchema() {
+    return { ...PlsPlusAddress.schema()
+    };
   }
 
   get composedAddress() {
@@ -18073,19 +18041,14 @@ class PlsPlusAddress extends ContainerComponent {
 
   onChange(flags, fromRoot) {
     if (this.autocompleteMode) {
-      if (this.dataValue?.address) this.dataValue.address.selectedAddress = this.address.autocompleteAddress;
-    } else if (this.dataValue?.address) this.dataValue.address.selectedAddress = this.composedAddress;
+      if (this.address) this.setAddressProp("selectedAddress", this.address.autocompleteAddress);
+    } else if (this.address) this.setAddressProp("selectedAddress", this.composedAddress);
 
     return super.onChange(flags, fromRoot);
   }
 
   init() {
     this.components = this.components || [];
-
-    if (this.builderMode || this.manualModeEnabled) {
-      NestedComponent.prototype.addComponents.call(this, this.address);
-    }
-
     Field.prototype.init.call(this);
 
     if (!this.builderMode) {
@@ -18098,6 +18061,8 @@ class PlsPlusAddress extends ContainerComponent {
         this.provider = this.initializeProvider(provider, providerOptions);
       }
     }
+
+    return super.init();
   }
 
   initializeProvider(provider, options = {}) {
@@ -18106,9 +18071,24 @@ class PlsPlusAddress extends ContainerComponent {
     });
   }
 
+  get manualModeEnabled() {
+    return Boolean(this.component.enableManualMode);
+  }
+
+  get mode() {
+    if (!this.manualModeEnabled) {
+      return PlsPlusAddressMode.Autocomplete;
+    }
+
+    return this.address.mode || PlsPlusAddressMode.Autocomplete;
+  }
+
+  set mode(value) {
+    this.setAddressProp("mode", value);
+  }
+
   get emptyValue() {
     return this.manualModeEnabled ? {
-      mode: PlsPlusAddressMode.Autocomplete,
       address: {
         address1: "",
         address2: "",
@@ -18117,23 +18097,10 @@ class PlsPlusAddress extends ContainerComponent {
         postcode: "",
         autocompleteAddress: "",
         selectedAddress: "",
-        state: "QLD"
+        state: "QLD",
+        mode: this.mode
       }
     } : {};
-  }
-
-  get mode() {
-    if (!this.manualModeEnabled) {
-      return PlsPlusAddressMode.Autocomplete;
-    }
-
-    return this.dataValue?.mode ?? PlsPlusAddressMode.Autocomplete;
-  }
-
-  set mode(value) {
-    if (this.manualModeEnabled) {
-      this.dataValue.mode = value;
-    }
   }
 
   get autocompleteMode() {
@@ -18144,65 +18111,76 @@ class PlsPlusAddress extends ContainerComponent {
     return this.mode === PlsPlusAddressMode.Manual;
   }
 
-  get manualModeEnabled() {
-    return Boolean(this.component.enableManualMode);
+  get isMultiple() {
+    return Boolean(this.component.multiple);
+  }
+
+  get container() {
+    return this.getComponents().find(comp => comp.originalComponent.tags?.includes("container"));
+  }
+
+  get address() {
+    const dataValue = this.container?.dataValue;
+    const addressData = addressKeys.map(k => {
+      if (this.container) {
+        const componentKey = this.container.getComponents().find(comp => comp.originalComponent.tags?.includes(k))?.component.key;
+        return {
+          [k]: dataValue[componentKey]
+        };
+      }
+
+      return {};
+    });
+    return Object.assign({}, ...addressData);
+  }
+
+  set address(value) {
+    this.dataValue = value;
+    let changed = false;
+
+    if (this.container) {
+      addressKeys.forEach(k => {
+        const componentKey = this.container.getComponents().find(comp => comp.originalComponent.tags?.includes(k))?.component.key;
+
+        if (this.container.dataValue[componentKey] !== value[k]) {
+          this.container.dataValue[componentKey] = value[k];
+          changed = true;
+        }
+      });
+    }
+
+    if (changed) this.onChange({
+      modified: true
+    });
+  }
+
+  setAddressProp(prop, value) {
+    if (this.address[prop] === value) return;
+    this.address = { ...this.address,
+      [prop]: value
+    };
   }
 
   restoreComponentsContext() {
-    this.getComponents().forEach(component => {
-      component.data = this.address;
+    this.container?.getComponents().forEach(component => {
+      component.data = this.container.dataValue;
       component.setValue(component.dataValue, {
         noUpdateEvent: true
       });
     });
   }
 
-  get isMultiple() {
-    return Boolean(this.component.multiple);
-  }
-
-  get address() {
-    return this.manualModeEnabled && this.dataValue ? this.dataValue.address : this.dataValue;
-  }
-
-  set address(value) {
-    if (this.manualModeEnabled) {
-      this.dataValue.address = value;
-    } else {
-      this.dataValue = value;
-    }
-  }
-
-  get defaultValue() {
-    return super.defaultValue;
-  }
-
-  get defaultSchema() {
-    return { ...PlsPlusAddress.schema(),
-      tree: "true"
-    };
-  }
-
-  isValueInLegacyFormat(value) {
-    return value && !value.mode;
-  }
-
-  normalizeValue(value) {
-    return this.manualModeEnabled && this.isValueInLegacyFormat(value) ? {
-      mode: PlsPlusAddressMode.Autocomplete,
-      address: value
-    } : value;
-  }
-
   setValue(value, flags = {}) {
-    const changed = Field.prototype.setValue.call(this, value, flags);
+    // const changed = Field.prototype.setValue.call(this, value, flags);
     this.restoreComponentsContext();
 
-    if (changed || !lodash_default().isEmpty(value) && flags.fromSubmission) {
-      this.redraw();
+    if (!lodash_default().isEmpty(value) && flags.fromSubmission) {
+      setTimeout(() => {
+        this.redraw();
+      });
     }
 
-    return changed;
+    return super.setValue(value, flags);
   }
 
   static get modeSwitcherRef() {
@@ -18260,15 +18238,29 @@ class PlsPlusAddress extends ContainerComponent {
   }
 
   renderElement(value) {
-    this.getComponents().forEach(component => {
-      component.disabled = !this.manualMode;
+    this.container?.getComponents().forEach(component => {
+      if (!this.builderMode) {
+        component.disabled = component.originalComponent.disabled || !this.manualMode;
+        component.component.validate = !this.manualMode ? {} : component.originalComponent.validate;
+      }
 
       component.onChange = (flags, fromRoot) => {
-        this.dataValue.address.selectedAddress = this.composedAddress;
-        return super.onChange(flags, fromRoot);
+        if (flags.modified && component.originalComponent.tags.length) {
+          this.setAddressProp(component.originalComponent.tags[0], component.dataValue);
+        }
+
+        return this.onChange(flags, fromRoot);
       };
     });
-    this.component.validate.required = !this.manualMode;
+
+    if (!this.builderMode) {
+      this.component.validate = {
+        custom: `valid = !!instance.address.selectedAddress;`,
+        customMessage: `${this.component.label} is required.`,
+        required: !this.manualMode
+      };
+    }
+
     return this.renderTemplate(this.templateName, {
       children: this.hasChildren ? this.renderComponents() : "",
       nestedKey: this.nestedKey,
@@ -18292,10 +18284,7 @@ class PlsPlusAddress extends ContainerComponent {
   }
 
   onSelectAddress(address, element, index) {
-    this.address.autocompleteAddress = address;
-    this.triggerChange({
-      modified: true
-    });
+    this.setAddressProp("autocompleteAddress", address);
 
     if (element) {
       element.value = this.getDisplayValue(this.address);
@@ -18343,18 +18332,13 @@ class PlsPlusAddress extends ContainerComponent {
             this.onSelectAddress(address, elem, index);
             this.provider.parseAddress(address).then(r => {
               this.address = { ...this.address,
-                ...this.provider.breakAddress(r)
+                ...this.provider.breakAddress(r),
+                mode: this.mode
               };
-              this.triggerChange({
-                modified: true
-              }); // setTimeout(() => {
-              //   this.restoreComponentsContext();
-              // }, 1000);
-
               this.restoreComponentsContext();
-              this.getComponents().forEach(component => {
+              this.container.getComponents().forEach(component => {
                 const childElement = document.getElementById(`${component.id}-${component.component.key}`);
-                childElement.value = component.dataValue;
+                if (childElement) childElement.value = component.dataValue;
               });
             });
             this.redraw();
@@ -18367,15 +18351,6 @@ class PlsPlusAddress extends ContainerComponent {
 
           if (elem.value) {
             elem.value = this.getDisplayValue(this.address);
-          }
-        });
-        this.addEventListener(elem, "keyup", () => {
-          if (!elem) {
-            return;
-          }
-
-          if (!elem.value) {
-            this.clearAddress(elem, index);
           }
         });
       }
@@ -18392,11 +18367,9 @@ class PlsPlusAddress extends ContainerComponent {
         if (!this.builderMode) {
           if (this.manualMode) {
             this.restoreComponentsContext();
+          } else {
+            this.clearAddress(this.searchInput);
           }
-
-          this.triggerChange({
-            modified: true
-          });
         }
 
         this.redraw();
@@ -18432,9 +18405,14 @@ class PlsPlusAddress extends ContainerComponent {
 
   redraw() {
     const modeSwitcherInFocus = this.modeSwitcher && document.activeElement === this.modeSwitcher;
+    const searchInputInFocus = this.searchInput && document.activeElement === this.searchInput;
     return super.redraw().then(result => {
       if (modeSwitcherInFocus && this.modeSwitcher) {
         this.modeSwitcher.focus();
+      }
+
+      if (searchInputInFocus && this.searchInput) {
+        this.searchInput.focus();
       }
 
       return result;
@@ -18442,23 +18420,15 @@ class PlsPlusAddress extends ContainerComponent {
   }
 
   clearAddress(element, index) {
-    if (!this.isEmpty()) {
-      this.triggerChange();
-    }
-
-    if (this.address?.[index]) {
-      this.address[index] = this.emptyValue.address;
-    } else {
-      this.address = this.emptyValue.address;
-    }
+    this.address = this.emptyValue.address;
 
     if (element) {
       element.value = "";
     }
 
-    this.getComponents().forEach(component => {
+    this.container?.getComponents().forEach(component => {
       const childElement = document.getElementById(`${component.id}-${component.component.key}`);
-      if (childElement) childElement.value = this.address[component.component.key] || "";
+      if (childElement) childElement.value = component.dataValue;
     });
     this.updateRemoveIcon(index);
     this.redraw();
@@ -18482,40 +18452,6 @@ class PlsPlusAddress extends ContainerComponent {
     }
   }
 
-  getValueAsString(value, options) {
-    if (!value) {
-      return "";
-    }
-
-    const normalizedValue = this.normalizeValue(value);
-    const {
-      address,
-      mode
-    } = this.manualModeEnabled ? normalizedValue : {
-      address: normalizedValue,
-      mode: PlsPlusAddressMode.Autocomplete
-    };
-    const valueInManualMode = mode === PlsPlusAddressMode.Manual;
-
-    if (this.provider && !valueInManualMode) {
-      return this.getDisplayValue(address);
-    }
-
-    if (valueInManualMode) {
-      if (this.component.manualModeViewString) {
-        return this.interpolate(this.component.manualModeViewString, {
-          address,
-          data: this.data,
-          component: this.component
-        });
-      }
-
-      return this.getComponents().filter(component => component.hasValue(address)).map(component => [component, lodash_default().get(address, component.key)]).filter(([component, componentValue]) => !component.isEmpty(componentValue)).map(([component, componentValue]) => component.getValueAsString(componentValue, options)).join(", ");
-    }
-
-    return super.getValueAsString(address, options);
-  }
-
   focus() {
     if (this.searchInput && this.searchInput[0]) {
       this.searchInput[0].focus();
@@ -18527,8 +18463,6 @@ PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/PlsPlusAddress/index.js
 
 ;// CONCATENATED MODULE: ./src/components/index.js
-
-
 
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/plsPlusAddress/form.ejs
 /* harmony default export */ const plsPlusAddress_form = ("<div class=\"address-autocomplete-container\">\n  <input\n    ref=\"{{ ctx.ref.searchInput }}\"\n    {% for (var attr in ctx.inputAttributes) { %}\n      {{attr}}=\"{{ctx.inputAttributes[attr]}}\"\n    {% } %}\n    value=\"{{ ctx.displayValue }}\"\n    autocomplete=\"off\"\n    aria-label=\"{{ctx.t('autocomplete')}}\"\n  >\n  {% if (!ctx.component.disableClearIcon) { %}\n    <i\n      class=\"address-autocomplete-remove-value-icon fa fa-times\"\n      tabindex=\"{{ ctx.inputAttributes.tabindex }}\"\n      ref=\"{{ ctx.ref.removeValueIcon }}\"\n    ></i>\n  {% } %}\n</div>\n{% if (!ctx.hasApiKey) { %}\n    <div class=\"form-text\">Please provide an API key in Provider to use the search function.</div>\n{% } %}\n{% if (ctx.self.manualModeEnabled) { %}\n  <div class=\"form-check checkbox\">\n    <label class=\"form-check-label\">\n      <input\n        ref=\"{{ ctx.ref.modeSwitcher }}\"\n        type=\"checkbox\"\n        class=\"form-check-input\"\n        tabindex=\"{{ ctx.inputAttributes.tabindex }}\"\n        {% if (ctx.mode.manual) { %}checked=true{% } %}\n        {% if (ctx.disabled) { %}disabled=true{% } %}\n      >\n      <span>{{ ctx.component.switchToManualModeLabel }}</span>\n    </label>\n  </div>\n{% } %}\n{% if (ctx.self.manualModeEnabled && ( ctx.mode.manual || ctx.displayValue)) { %}\n  <div ref=\"{{ ctx.nestedKey }}\">\n    {{ ctx.children }}\n  </div>\n{% } %}\n{% if (ctx.mode.manual) { %}\n<div>\n  <!-- Todo Link/function to improve the address database -->\n  <!-- <p><a href=\"#\" target=\"_blank\">Please take part to improve our address database if we couldn't find your address.</a></p> -->\n</div>\n{% } %}");
