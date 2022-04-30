@@ -159,7 +159,8 @@ var createForm_options_default = /*#__PURE__*/__webpack_require__.n(createForm_o
   form,
   formConfirmation
 }) => {
-  // Change event/GTM
+  console.log("form", form); // Change event/GTM
+
   form.on("click", e => {
     // eslint-disable-next-line no-underscore-dangle
     const formTitle = form._form.title; // eslint-disable-next-line no-underscore-dangle
