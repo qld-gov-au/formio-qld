@@ -153,7 +153,8 @@ class PdfDownload {
   }
 
   feedbackMessageTemplate() {
-    return `<div class="qg-formsio__thank-you-message alert alert-success mt-4" role="alert">
+    console.info(window.sessionStorage.getItem("pdfUrl"));
+    return `<div class="qg-formsio__thank-you-message alert alert-success mt-4 test" role="alert">
             ${this.getDownloadMessage()} 
             ${window.sessionStorage.getItem("pdfUrl") ? `<button class="btn btn-primary" id="download-pdf">Download a PDF copy of your enquiry</button>` : ""}
        </div>`;
@@ -201,10 +202,8 @@ class PdfDownload {
   form.on("submitDone", event => {
     if (pdfDownload && pdfDownloadMessage) {
       const cPdfDownload = new PdfDownload(event, pdfDownloadMessage, pdfDownload);
-      const pdfDownloadUrl = cPdfDownload && cPdfDownload.getDownloadUrl();
-      const pdfDownloadMessageSquizMetadata = cPdfDownload && cPdfDownload.feedbackMessageTemplate();
-      window.sessionStorage.setItem("pdfUrl", pdfDownloadUrl);
-      document.getElementsByClassName("qg-forms-v2")[0].innerHTML = pdfDownloadMessageSquizMetadata;
+      window.sessionStorage.setItem("pdfUrl", cPdfDownload.getDownloadUrl());
+      document.getElementsByClassName("qg-forms-v2")[0].innerHTML = cPdfDownload.feedbackMessageTemplate();
     } // redirect after submit
 
 
