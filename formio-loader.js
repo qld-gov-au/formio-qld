@@ -118,59 +118,34 @@ var createForm_options = __webpack_require__(203);
 var createForm_options_default = /*#__PURE__*/__webpack_require__.n(createForm_options);
 ;// CONCATENATED MODULE: ./src/components/PdfDownload/index.js
 class PdfDownload {
-  constructor(event, pdfDownloadMessage, pdfDownload) {
+  constructor(event, form) {
     this.onDownloadbtnClick();
-    this.formData = event;
-    this.pdfDownloadMessage = pdfDownloadMessage;
-    this.pdfDownload = pdfDownload;
+    this.submitEvt = event;
+    this.formInstance = form;
   }
 
   isPdfDownloadEnabled() {
-    return true;
-  }
-
-  getDownloadUrl() {
-    if (this.isPdfDownloadEnabled()) {
-      return this.formData.metadata.PostToAPIGateway.DownloadUrl;
+    if (this.submitEvt.data && this.submitEvt.data.needPdf === "yes") {
+      const pdfUrl = this.submitEvt.metadata.pdfUrl.DownloadUrl;
+      window.sessionStorage.setItem("pdfUrl", pdfUrl);
+      this.formInstance.root.nextPage();
+      this.onDownloadbtnClick();
     }
-
-    return false;
-  }
-
-  getDownloadMessage() {
-    if (this.isPdfDownloadEnabled()) {
-      return this.pdfDownloadMessage;
-    }
-
-    return false;
   }
 
   onDownloadbtnClick() {
-    // eslint-disable-next-line func-names
-    $("body").on("click", "#download-pdf", function () {
-      window.location.href = window.sessionStorage.getItem("pdfUrl");
+    $("body").on("click", "#pdf-download", () => {
+      window.open(window.sessionStorage.getItem("pdfUrl"), "_blank");
     });
-  }
-
-  feedbackMessageTemplate() {
-    console.info(window.sessionStorage.getItem("pdfUrl"));
-    return `<div class="qg-formsio__thank-you-message alert alert-success mt-4 test" role="alert">
-            ${this.getDownloadMessage()} 
-            ${window.sessionStorage.getItem("pdfUrl") ? `<button class="btn btn-primary" id="download-pdf">Download a PDF copy of your enquiry</button>` : ""}
-       </div>`;
   }
 
 }
 ;// CONCATENATED MODULE: ./src/config/createForm.controller.js
 
 /* harmony default export */ const createForm_controller = (props => {
-  // output what inside prop
-  console.info("Default form controller", props);
   const {
     form,
-    formConfirmation,
-    pdfDownloadMessage,
-    pdfDownload
+    formConfirmation
   } = props; // Change event/GTM
 
   form.on("click", e => {
@@ -200,12 +175,9 @@ class PdfDownload {
     form.submit();
   });
   form.on("submitDone", event => {
-    if (pdfDownload && pdfDownloadMessage) {
-      const cPdfDownload = new PdfDownload(event, pdfDownloadMessage, pdfDownload);
-      window.sessionStorage.setItem("pdfUrl", cPdfDownload.getDownloadUrl());
-      document.getElementsByClassName("qg-forms-v2")[0].innerHTML = cPdfDownload.feedbackMessageTemplate();
-    } // redirect after submit
-
+    // pdf download option
+    const pdfDownload = new PdfDownload(event, form);
+    pdfDownload.isPdfDownloadEnabled(); // redirect after submit
 
     if (formConfirmation) window.location.href = formConfirmation;
   });
