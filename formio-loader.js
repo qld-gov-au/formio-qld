@@ -116,7 +116,7 @@ __webpack_require__.d(__webpack_exports__, {
 // EXTERNAL MODULE: ./src/config/createForm.options.js
 var createForm_options = __webpack_require__(203);
 var createForm_options_default = /*#__PURE__*/__webpack_require__.n(createForm_options);
-;// CONCATENATED MODULE: ./src/components/PdfDownload/index.js
+;// CONCATENATED MODULE: ./src/helpers/FormioLoader/PdfDownload/index.js
 class PdfDownload {
   constructor(event, form) {
     this.submitEvt = event;
