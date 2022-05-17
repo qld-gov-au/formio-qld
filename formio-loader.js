@@ -118,25 +118,33 @@ var createForm_options = __webpack_require__(203);
 var createForm_options_default = /*#__PURE__*/__webpack_require__.n(createForm_options);
 ;// CONCATENATED MODULE: ./src/helpers/PdfDownload/index.js
 class PdfDownload {
-  constructor(event, form) {
-    this.submitEvt = event;
-    this.formInstance = form;
+  /**
+   * isNextPage function check needPdf field is marked as 'yes' in form.io
+   * and then set PDF url as a session storage
+   * @return {undefined}
+   * */
+  static isNextPage(form, event) {
+    if (event && event.data && event.data.needPdf === "yes") {
+      const pdfUrl = event.metadata.pdfUrl.DownloadUrl;
+      window.sessionStorage.setItem("pdfUrl", pdfUrl);
+      form.root.nextPage();
+    }
   }
   /**
-   * isPdfDownloadEnabled function check needPdf field is marked as 'yes' in form.io
+   * isLastPage
    * and then set PDF url as a session storage
    * @return {undefined}
    * */
 
 
-  isPdfDownloadEnabled() {
-    if (this.submitEvt.data && this.submitEvt.data.needPdf === "yes") {
-      const pdfUrl = this.submitEvt.metadata.pdfUrl.DownloadUrl;
-      window.sessionStorage.setItem("pdfUrl", pdfUrl);
-      this.formInstance.root.nextPage().then(() => {
-        document.getElementsByClassName("formio-wizard-nav-container")[0].style.visibility = "hidden";
-      });
-      this.onDownloadbtnClick();
+  static isLastPage(form) {
+    if (form.currentNextPage === -1) {
+      if (window.sessionStorage.getItem("pdfUrl") !== null) {
+        setTimeout(() => {
+          document.getElementsByClassName("formio-wizard-nav-container")[0].style.visibility = "hidden";
+        }, 0);
+        this.onDownloadbtnClick();
+      }
     }
   }
   /**
@@ -146,10 +154,9 @@ class PdfDownload {
    * */
 
 
-  onDownloadbtnClick() {
+  static onDownloadbtnClick() {
     document.addEventListener("click", e => {
-      if (e.target.closest("#pdf-download")) {
-        console.info("clicked button v2");
+      if (e.target.closest(".pdf-download")) {
         window.open(window.sessionStorage.getItem("pdfUrl"), "_blank");
       }
     });
@@ -190,10 +197,11 @@ class PdfDownload {
     form.submit();
   });
   form.on("submitDone", event => {
-    // pdf download option
-    const pdfDownload = new PdfDownload(event, form);
-    pdfDownload.isPdfDownloadEnabled();
+    PdfDownload.isNextPage(form, event);
     if (formConfirmation) window.location.href = formConfirmation;
+  });
+  form.on("nextPage", event => {
+    PdfDownload.isLastPage(form, event);
   });
 });
 ;// CONCATENATED MODULE: ./src/helpers/FormioLoader/FormioLoader.js
