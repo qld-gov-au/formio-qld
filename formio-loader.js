@@ -116,7 +116,48 @@ __webpack_require__.d(__webpack_exports__, {
 // EXTERNAL MODULE: ./src/config/createForm.options.js
 var createForm_options = __webpack_require__(203);
 var createForm_options_default = /*#__PURE__*/__webpack_require__.n(createForm_options);
+;// CONCATENATED MODULE: ./src/helpers/PdfDownload/index.js
+class PdfDownload {
+  constructor(event, form) {
+    this.submitEvt = event;
+    this.formInstance = form;
+  }
+  /**
+   * isPdfDownloadEnabled function check needPdf field is marked as 'yes' in form.io
+   * and then set PDF url as a session storage
+   * @return {undefined}
+   * */
+
+
+  isPdfDownloadEnabled() {
+    if (this.submitEvt.data && this.submitEvt.data.needPdf === "yes") {
+      const pdfUrl = this.submitEvt.metadata.pdfUrl.DownloadUrl;
+      window.sessionStorage.setItem("pdfUrl", pdfUrl);
+      this.formInstance.root.nextPage().then(() => {
+        document.getElementsByClassName("formio-wizard-nav-container")[0].style.visibility = "hidden";
+      });
+      this.onDownloadbtnClick();
+    }
+  }
+  /**
+   * onDownloadbtnClick function register a click event on 'pdf-download' button click
+   * url is set from the session storage
+   * @return {undefined}
+   * */
+
+
+  onDownloadbtnClick() {
+    document.addEventListener("click", e => {
+      if (e.target.closest("#pdf-download")) {
+        console.info("clicked button v2");
+        window.open(window.sessionStorage.getItem("pdfUrl"), "_blank");
+      }
+    });
+  }
+
+}
 ;// CONCATENATED MODULE: ./src/config/createForm.controller.js
+
 /* harmony default export */ const createForm_controller = (({
   form,
   formConfirmation
@@ -148,7 +189,10 @@ var createForm_options_default = /*#__PURE__*/__webpack_require__.n(createForm_o
   form.on("applicationSubmit", () => {
     form.submit();
   });
-  form.on("submitDone", () => {
+  form.on("submitDone", event => {
+    // pdf download option
+    const pdfDownload = new PdfDownload(event, form);
+    pdfDownload.isPdfDownloadEnabled();
     if (formConfirmation) window.location.href = formConfirmation;
   });
 });
@@ -317,7 +361,6 @@ const initFormio = () => {
       formioFormName,
       formioEnvUrl,
       formioPdfDownload,
-      formioPdfDownloadMessage,
       formioFormConfirmation,
       formioFormRevision,
       formioNamespace,
@@ -330,7 +373,6 @@ const initFormio = () => {
       formName: formioFormName,
       envUrl: formioEnvUrl,
       pdfDownload: formioPdfDownload,
-      pdfDownloadMessage: formioPdfDownloadMessage,
       formConfirmation: formioFormConfirmation,
       formRevision: formioFormRevision,
       namespace: formioNamespace,
