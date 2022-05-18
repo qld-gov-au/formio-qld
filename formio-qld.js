@@ -18835,6 +18835,8 @@ class PdfSubmitButton extends Button {
               ${downloadFailedMessage}
             `;
         }
+
+        this.root.element.scrollIntoView();
       }, true);
     }
   }
