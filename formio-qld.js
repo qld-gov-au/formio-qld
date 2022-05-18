@@ -18463,119 +18463,12 @@ class PlsPlusAddress extends FieldsetComponent {
 PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/PlsPlusAddress/index.js
 
-;// CONCATENATED MODULE: ./src/utils/BuilderUtils.js
-/*
- * forked from
- * https://github.com/formio/formio.js/blob/master/src/utils/builder.js
- *
- */
-
-const {
-  eachComponent
-} = Formio.Utils;
-const {
-  uniqueKey
-} = Formio.Utils;
-/* harmony default export */ const BuilderUtils = ({
-  /**
-   * Appends a number to a component.key to keep it unique
-   *
-   * @param {Object} form
-   *   The components parent form.
-   * @param {Object} component
-   *   The component to uniquify
-   */
-  uniquify(container, component) {
-    let changed = false;
-    const formKeys = {};
-    eachComponent(container, comp => {
-      formKeys[comp.key] = true;
-
-      if (["address", "container", "datagrid", "editgrid", "dynamicWizard", "tree"].includes(comp.type) || comp.tree || comp.arrayTree) {
-        return true;
-      }
-
-      return false;
-    }, true); // Recurse into all child components.
-
-    eachComponent([component], comp => {
-      // Skip key uniquification if this component doesn't have a key.
-      if (!comp.key) {
-        return false;
-      }
-
-      const newKey = uniqueKey(formKeys, comp.key);
-
-      if (newKey !== comp.key) {
-        comp.key = newKey;
-        changed = true;
-      }
-
-      formKeys[newKey] = true;
-
-      if (["address", "container", "datagrid", "editgrid", "dynamicWizard", "tree"].includes(comp.type) || comp.tree || comp.arrayTree) {
-        return true;
-      }
-
-      return false;
-    }, true);
-    return changed;
-  },
-
-  additionalShortcuts: {
-    button: ["Enter", "Esc"]
-  },
-
-  getAlphaShortcuts() {
-    return lodash_default().range("A".charCodeAt(), "Z".charCodeAt() + 1).map(charCode => String.fromCharCode(charCode));
-  },
-
-  getAdditionalShortcuts(type) {
-    return this.additionalShortcuts[type] || [];
-  },
-
-  getBindedShortcuts(components, input) {
-    const result = [];
-    eachComponent(components, component => {
-      if (component === input) {
-        return;
-      }
-
-      if (component.shortcut) {
-        result.push(component.shortcut);
-      }
-
-      if (component.values) {
-        component.values.forEach(value => {
-          if (value.shortcut) {
-            result.push(value.shortcut);
-          }
-        });
-      }
-    }, true);
-    return result;
-  },
-
-  getAvailableShortcuts(form, component) {
-    if (!component) {
-      return [];
-    }
-
-    return [""].concat(lodash_default().difference(this.getAlphaShortcuts().concat(this.getAdditionalShortcuts(component.type)), this.getBindedShortcuts(form.components, component))).map(shortcut => ({
-      label: shortcut,
-      value: shortcut
-    }));
-  }
-
-});
 ;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/editFrom/PdfSubmitButton.edit.display.js
 /*
  * use form.io Button component as boilerplate
  * https://github.com/formio/formio.js/blob/master/src/components/button/editForm/Button.edit.display.js
  *
  */
-
-
 /* harmony default export */ const PdfSubmitButton_edit_display = ([{
   type: "content",
   html: `<h2>Please follow <a href="#" target="_blank">this guide</a> to setup the form action before using this component.</h2>`,
@@ -18715,23 +18608,6 @@ const {
   placeholder: "Enter icon classes",
   tooltip: "This is the full icon class string to show the icon. Example: 'fa fa-plus'",
   weight: 170
-}, {
-  type: "select",
-  input: true,
-  weight: 180,
-  label: "Shortcut",
-  key: "shortcut",
-  tooltip: "Shortcut for this component.",
-  dataSrc: "custom",
-  valueProperty: "value",
-  customDefaultValue: () => "",
-  template: "{{ item.label }}",
-  data: {
-    custom(context) {
-      return BuilderUtils.getAvailableShortcuts(lodash_default().get(context, "instance.options.editForm", {}), lodash_default().get(context, "instance.options.editComponent", {}));
-    }
-
-  }
 }, {
   type: "checkbox",
   key: "block",
