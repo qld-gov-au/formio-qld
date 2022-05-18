@@ -18823,8 +18823,8 @@ class PdfSubmitButton extends Button {
 
         if (pdfUrl) {
           this.root.element.innerHTML = `
-              ${downloadSuccessMessage}
-              <div class="mt-3">
+              ${downloadSuccessMessage ? `<div class="mb-3">${downloadSuccessMessage}</div>` : ""}
+              <div>
                 <a href="${pdfUrl}" class="${className}" target="${target}" />
                   ${label}
                 </a>
