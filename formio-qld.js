@@ -18492,18 +18492,20 @@ PlsPlusAddress.editForm = PlsPlusAddress_form;
   label: "Download message if PDF generated successfully",
   tooltip: "Message show up after form submission if PDF generated successfully.",
   rows: 5,
-  editor: "ace",
   input: true,
-  weight: 120
+  weight: 120,
+  editor: "ace",
+  as: "html"
 }, {
   type: "textarea",
   key: "downloadFailedMessage",
   label: "Download message if PDF didn't generate",
   tooltip: "Message show after form submission if PDF didn't generate.",
   rows: 5,
-  editor: "ace",
   input: true,
-  weight: 120
+  weight: 120,
+  editor: "ace",
+  as: "html"
 }, {
   type: "textfield",
   label: "Download message class if success",
