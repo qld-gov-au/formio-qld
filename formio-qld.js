@@ -18486,7 +18486,7 @@ const boilerplateButton = {
 /* harmony default export */ const plsPlusAddress_html = ("<div ref=\"value\">{% if (ctx.displayValue) { %}{{ctx.displayValue}}{% } else { %}-{% } %}</div>");
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/plsPlusAddress/index.js
 /*
- * use form.io Address template as BoilerplateButton
+ * use form.io Address template as boilerplate
  * https://github.com/formio/formio.js/blob/master/src/templates/bootstrap/address/index.js
  *
  */
