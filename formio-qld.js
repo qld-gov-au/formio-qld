@@ -7,7 +7,7 @@
 		exports["FormioQld"] = factory();
 	else
 		root["FormioQld"] = factory();
-})(globalThis, function() {
+})(self, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -411,7 +411,7 @@ return /******/ (() => { // webpackBootstrap
 
 /***/ }),
 
-/***/ 384:
+/***/ 596:
 /***/ ((module) => {
 
 module.exports = {
@@ -17739,8 +17739,7 @@ __webpack_require__.r(__webpack_exports__);
 var components_namespaceObject = {};
 __webpack_require__.r(components_namespaceObject);
 __webpack_require__.d(components_namespaceObject, {
-  "CustomHeader": () => (CustomHeader),
-  "CustomTextfield": () => (CustomTextfield),
+  "PdfSubmitButton": () => (PdfSubmitButton),
   "PlsPlusAddress": () => (PlsPlusAddress)
 });
 
@@ -17748,11 +17747,12 @@ __webpack_require__.d(components_namespaceObject, {
 var bootstrap_namespaceObject = {};
 __webpack_require__.r(bootstrap_namespaceObject);
 __webpack_require__.d(bootstrap_namespaceObject, {
+  "boilerplateButton": () => (boilerplateButton),
   "plsPlusAddress": () => (plsPlusAddress)
 });
 
-// EXTERNAL MODULE: ./src/options/build.options.js
-var build_options = __webpack_require__(384);
+// EXTERNAL MODULE: ./src/config/build.options.js
+var build_options = __webpack_require__(596);
 var build_options_default = /*#__PURE__*/__webpack_require__.n(build_options);
 ;// CONCATENATED MODULE: ./src/utils/getComponents.js
 const getComponents = components => {
@@ -17763,61 +17763,6 @@ const getComponents = components => {
   });
   return customComponents;
 };
-;// CONCATENATED MODULE: ./src/components/CustomHeader/CustomHeader.js
-const HTMLComponent = Formio.Components.components.htmlelement;
-class CustomHeader extends HTMLComponent {
-  /**
-   * Define the default schema to change the type and tag and label.
-   */
-  static schema(...extend) {
-    return HTMLComponent.schema({
-      label: "CustomHeader",
-      type: "customheader",
-      tag: "h1"
-    }, ...extend);
-  }
-
-  static get builderInfo() {
-    return {
-      title: "CustomHeader",
-      group: "custom",
-      icon: "code",
-      weight: 2,
-      documentation: "/userguide/#html-element-component",
-      schema: CustomHeader.schema()
-    };
-  }
-
-}
-;// CONCATENATED MODULE: ./src/components/CustomHeader/index.js
-
-;// CONCATENATED MODULE: ./src/components/CustomTextfield/CustomTextfield.js
-const TextfieldComponent = Formio.Components.components.textfield;
-class CustomTextfield extends TextfieldComponent {
-  /**
-   * Define the default schema to change the type and tag and label.
-   */
-  static schema(...extend) {
-    return TextfieldComponent.schema({
-      label: "CustomTextfield",
-      type: "customtextfield"
-    }, ...extend);
-  }
-
-  static get builderInfo() {
-    return {
-      title: "CustomTextfield",
-      group: "custom",
-      icon: "terminal",
-      weight: 2,
-      documentation: "/userguide/#html-element-component",
-      schema: CustomTextfield.schema()
-    };
-  }
-
-}
-;// CONCATENATED MODULE: ./src/components/CustomTextfield/index.js
-
 // EXTERNAL MODULE: ./node_modules/autocompleter/autocomplete.js
 var autocomplete = __webpack_require__(338);
 var autocomplete_default = /*#__PURE__*/__webpack_require__.n(autocomplete);
@@ -17849,9 +17794,12 @@ var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
   validate: {
     required: true
   },
-  customConditional: ({
-    data
-  }) => Boolean(data.enableManualMode)
+  customConditional: _ref => {
+    let {
+      data
+    } = _ref;
+    return Boolean(data.enableManualMode);
+  }
 }, {
   weight: 40,
   type: "checkbox",
@@ -17867,9 +17815,12 @@ var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
   placeholder: "Add Another",
   weight: 410,
   input: true,
-  customConditional: ({
-    data
-  }) => data.multiple
+  customConditional: _ref2 => {
+    let {
+      data
+    } = _ref2;
+    return data.multiple;
+  }
 }]);
 ;// CONCATENATED MODULE: ./src/components/PlsPlusAddress/editForm/PlsPlusAddress.edit.provider.js
 /* harmony default export */ const PlsPlusAddress_edit_provider = ([{
@@ -17880,7 +17831,7 @@ var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
   placeholder: "Enter Franchise API Key",
   weight: 10,
   tooltip: "You must have an API key in order to use this component.",
-  description: "You must have a API key in order to use this component, please contact <a href='mailto:qol.development@smartservice.qld.gov.au' target='_blank'>qol.development@smartservice.qld.gov.au</a>(TBC) if you want to acquire an API key. (To be confirmed)",
+  description: "You must have a API key in order to use this component, please refer to <a href='https://www.qld.gov.au/_resources/matrix-documentation/components/form.io-guides/form.io-plsplusaddress-component' target='_blank'>this doc</a> or contact <a href='mailto:online@smartservice.qld.gov.au' target='_blank'>online@smartservice.qld.gov.au</a> if you want to acquire an API key.",
   validate: {
     required: true
   }
@@ -17904,7 +17855,11 @@ var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
 
 
 const baseEditForm = Formio.Components.components.base.editForm;
-/* harmony default export */ const PlsPlusAddress_form = ((...extend) => {
+/* harmony default export */ const PlsPlusAddress_form = (function () {
+  for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+    extend[_key] = arguments[_key];
+  }
+
   return baseEditForm([{
     key: "data",
     components: PlsPlusAddress_edit_data
@@ -17922,14 +17877,15 @@ const baseEditForm = Formio.Components.components.base.editForm;
 /*
  * use form.io Address component as boilerplate
  * https://github.com/formio/formio.js/blob/master/src/components/address/Address.js
+ * need to extend from `container` to `fieldset` due to Formio app upgrade from 7.1.2 to 7.3.0
+ * otherwise component data will get erase when submitted to the server
  *
  */
 
 
 
-const ContainerComponent = Formio.Components.components.container;
+const FieldsetComponent = Formio.Components.components.fieldset;
 const Field = Formio.Components.components.field;
-const NestedComponent = Formio.Components.components.nested;
 const PlsPlusAddressMode = {
   Autocomplete: "autocomplete",
   Manual: "manual"
@@ -17940,92 +17896,110 @@ const addressValidation = {
   customMessage: "You have exceeded the character limit or included html or special characters, e.g. <,>,{,},\\",
   maxLength: 40
 };
-class PlsPlusAddress extends ContainerComponent {
-  static schema(...extend) {
-    return ContainerComponent.schema({
+const addressKeys = ["autocompleteAddress", "selectedAddress", "mode", "address1", "address2", "address3", "city", "state", "postcode"];
+class PlsPlusAddress extends FieldsetComponent {
+  constructor() {
+    super(...arguments);
+    this.noField = false;
+  }
+
+  static schema() {
+    for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+      extend[_key] = arguments[_key];
+    }
+
+    return FieldsetComponent.schema({
       type: "plsplusaddress",
-      label: "Address",
-      key: "address",
+      label: "PlsPlus Address",
+      key: "plsplusaddress",
       switchToManualModeLabel: "Can't find address? Switch to manual mode.",
       providerOptions: {},
-      manualModeViewString: "",
       hideLabel: false,
       disableClearIcon: false,
       enableManualMode: true,
+      input: true,
+      persistent: "client-only",
+      validate: {
+        required: true
+      },
       components: [{
-        label: "Autocomplete address",
-        persistent: false,
-        tableView: false,
-        key: "autocompleteAddress",
-        type: "hidden"
-      }, {
-        label: "Selected address",
-        persistent: false,
-        tableView: false,
-        key: "selectedAddress",
-        type: "hidden"
-      }, {
-        label: "Address line 1 <i>(include unit number if needed)</i>",
-        persistent: false,
-        tableView: false,
-        key: "address1",
-        type: "textfield",
-        input: true,
-        validate: {
-          required: true,
-          ...addressValidation
-        }
-      }, {
-        label: "Address line 2",
-        persistent: false,
-        tableView: false,
-        key: "address2",
-        type: "textfield",
-        input: true,
-        validate: addressValidation
-      }, {
-        label: "Address line 3",
-        persistent: false,
-        tableView: false,
-        key: "address3",
-        type: "textfield",
-        input: true,
-        validate: addressValidation
-      }, {
-        label: "Town, City or Suburb",
-        persistent: false,
-        tableView: false,
-        key: "city",
-        type: "textfield",
-        input: true,
-        validate: {
-          required: true,
-          ...addressValidation
-        }
-      }, {
-        label: "State",
-        persistent: false,
-        tableView: false,
-        key: "state",
-        type: "textfield",
-        input: true,
-        disabled: true,
-        defaultValue: "QLD"
-      }, {
-        label: "Postcode",
-        persistent: false,
-        tableView: false,
-        key: "postcode",
-        type: "textfield",
-        input: true,
-        inputMask: "9999",
-        validate: {
-          required: true,
-          pattern: "^([0-9]{4})$",
-          customMessage: "Invalid postcode format",
-          minLength: 4,
-          maxLength: 4
-        }
+        key: "addressData",
+        type: "container",
+        label: "Address data",
+        tableView: true,
+        tags: ["container"],
+        components: [{
+          label: "Autocomplete address",
+          key: "autocompleteAddress",
+          tags: ["autocompleteAddress"],
+          type: "hidden"
+        }, {
+          label: "Selected address",
+          key: "selectedAddress",
+          tags: ["selectedAddress"],
+          type: "hidden"
+        }, {
+          label: "Mode",
+          key: "mode",
+          tags: ["mode"],
+          type: "hidden"
+        }, {
+          label: "Address line 1 <i>(include unit number if needed)</i>",
+          key: "address1",
+          tags: ["address1"],
+          type: "textfield",
+          input: true,
+          validate: {
+            required: true,
+            ...addressValidation
+          }
+        }, {
+          label: "Address line 2",
+          key: "address2",
+          tags: ["address2"],
+          type: "textfield",
+          input: true,
+          validate: addressValidation
+        }, {
+          label: "Address line 3",
+          key: "address3",
+          tags: ["address3"],
+          type: "textfield",
+          input: true,
+          validate: addressValidation
+        }, {
+          label: "Town, City or Suburb",
+          key: "city",
+          tags: ["city"],
+          type: "textfield",
+          input: true,
+          validate: {
+            required: true,
+            ...addressValidation
+          }
+        }, {
+          label: "State",
+          key: "state",
+          tags: ["state"],
+          type: "textfield",
+          input: true,
+          disabled: true,
+          defaultValue: "QLD"
+        }, {
+          label: "Postcode",
+          key: "postcode",
+          tags: ["postcode"],
+          type: "textfield",
+          input: true,
+          inputMask: "9999",
+          validate: {
+            required: true,
+            pattern: "^([0-9]{4})$",
+            customMessage: "Invalid postcode format",
+            minLength: 4,
+            maxLength: 4
+          }
+        }]
       }]
     }, ...extend);
   }
@@ -18037,17 +18011,17 @@ class PlsPlusAddress extends ContainerComponent {
       icon: "home",
       documentation: "/userguide/#address",
       weight: 2,
-      // this is the tricky bit to get exception on duplicated keys in children components that belong to different nested components
-      // `tree: true` is needed for the exception, if it is defined in the schema, it will not pass to the submission data because it will fail the isDirty test (comparing defaultSchema and builder schema)
-      // as a solution `tree: true` need to define here instead
-      // https://github.com/formio/formio.js/blob/master/src/utils/formUtils.js#L89-L90
-      schema: { ...PlsPlusAddress.schema(),
-        tree: true
+      schema: { ...PlsPlusAddress.schema()
       }
     };
   }
 
-  mergeSchema(component = {}) {
+  getComponents() {
+    return this.components || [];
+  }
+
+  mergeSchema() {
+    let component = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     let {
       defaultSchema
     } = this;
@@ -18057,6 +18031,11 @@ class PlsPlusAddress extends ContainerComponent {
     }
 
     return lodash_default().defaultsDeep(component, defaultSchema);
+  }
+
+  get defaultSchema() {
+    return { ...PlsPlusAddress.schema()
+    };
   }
 
   get composedAddress() {
@@ -18073,19 +18052,14 @@ class PlsPlusAddress extends ContainerComponent {
 
   onChange(flags, fromRoot) {
     if (this.autocompleteMode) {
-      if (this.dataValue?.address) this.dataValue.address.selectedAddress = this.address.autocompleteAddress;
-    } else if (this.dataValue?.address) this.dataValue.address.selectedAddress = this.composedAddress;
+      if (this.address) this.setAddressProp("selectedAddress", this.address.autocompleteAddress);
+    } else if (this.address) this.setAddressProp("selectedAddress", this.composedAddress);
 
     return super.onChange(flags, fromRoot);
   }
 
   init() {
     this.components = this.components || [];
-
-    if (this.builderMode || this.manualModeEnabled) {
-      NestedComponent.prototype.addComponents.call(this, this.address);
-    }
-
     Field.prototype.init.call(this);
 
     if (!this.builderMode) {
@@ -18098,17 +18072,35 @@ class PlsPlusAddress extends ContainerComponent {
         this.provider = this.initializeProvider(provider, providerOptions);
       }
     }
+
+    return super.init();
   }
 
-  initializeProvider(provider, options = {}) {
+  initializeProvider(provider) {
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const Provider = Formio.Providers.getProvider("address", provider);
     return new Provider({ ...options
     });
   }
 
+  get manualModeEnabled() {
+    return Boolean(this.component.enableManualMode);
+  }
+
+  get mode() {
+    if (!this.manualModeEnabled) {
+      return PlsPlusAddressMode.Autocomplete;
+    }
+
+    return this.address.mode || PlsPlusAddressMode.Autocomplete;
+  }
+
+  set mode(value) {
+    this.setAddressProp("mode", value);
+  }
+
   get emptyValue() {
     return this.manualModeEnabled ? {
-      mode: PlsPlusAddressMode.Autocomplete,
       address: {
         address1: "",
         address2: "",
@@ -18117,23 +18109,10 @@ class PlsPlusAddress extends ContainerComponent {
         postcode: "",
         autocompleteAddress: "",
         selectedAddress: "",
-        state: "QLD"
+        state: "QLD",
+        mode: this.mode
       }
     } : {};
-  }
-
-  get mode() {
-    if (!this.manualModeEnabled) {
-      return PlsPlusAddressMode.Autocomplete;
-    }
-
-    return this.dataValue?.mode ?? PlsPlusAddressMode.Autocomplete;
-  }
-
-  set mode(value) {
-    if (this.manualModeEnabled) {
-      this.dataValue.mode = value;
-    }
   }
 
   get autocompleteMode() {
@@ -18144,65 +18123,97 @@ class PlsPlusAddress extends ContainerComponent {
     return this.mode === PlsPlusAddressMode.Manual;
   }
 
-  get manualModeEnabled() {
-    return Boolean(this.component.enableManualMode);
+  get isMultiple() {
+    return Boolean(this.component.multiple);
+  }
+
+  get container() {
+    return this.getComponents().find(comp => {
+      var _comp$originalCompone;
+
+      return (_comp$originalCompone = comp.originalComponent.tags) === null || _comp$originalCompone === void 0 ? void 0 : _comp$originalCompone.includes("container");
+    });
+  }
+
+  get address() {
+    var _this$container;
+
+    const dataValue = (_this$container = this.container) === null || _this$container === void 0 ? void 0 : _this$container.dataValue;
+    const addressData = addressKeys.map(k => {
+      if (this.container) {
+        var _this$container$getCo;
+
+        const componentKey = (_this$container$getCo = this.container.getComponents().find(comp => {
+          var _comp$originalCompone2;
+
+          return (_comp$originalCompone2 = comp.originalComponent.tags) === null || _comp$originalCompone2 === void 0 ? void 0 : _comp$originalCompone2.includes(k);
+        })) === null || _this$container$getCo === void 0 ? void 0 : _this$container$getCo.component.key;
+        return {
+          [k]: dataValue[componentKey]
+        };
+      }
+
+      return {};
+    });
+    return Object.assign({}, ...addressData);
+  }
+
+  set address(value) {
+    this.dataValue = value;
+    let changed = false;
+
+    if (this.container) {
+      addressKeys.forEach(k => {
+        var _this$container$getCo2;
+
+        const componentKey = (_this$container$getCo2 = this.container.getComponents().find(comp => {
+          var _comp$originalCompone3;
+
+          return (_comp$originalCompone3 = comp.originalComponent.tags) === null || _comp$originalCompone3 === void 0 ? void 0 : _comp$originalCompone3.includes(k);
+        })) === null || _this$container$getCo2 === void 0 ? void 0 : _this$container$getCo2.component.key;
+
+        if (this.container.dataValue[componentKey] !== value[k]) {
+          this.container.dataValue[componentKey] = value[k];
+          changed = true;
+        }
+      });
+    }
+
+    if (changed) this.onChange({
+      modified: true
+    });
+  }
+
+  setAddressProp(prop, value) {
+    if (this.address[prop] === value) return;
+    this.address = { ...this.address,
+      [prop]: value
+    };
   }
 
   restoreComponentsContext() {
-    this.getComponents().forEach(component => {
-      component.data = this.address;
+    var _this$container2;
+
+    (_this$container2 = this.container) === null || _this$container2 === void 0 ? void 0 : _this$container2.getComponents().forEach(component => {
+      component.data = this.container.dataValue;
       component.setValue(component.dataValue, {
         noUpdateEvent: true
       });
     });
   }
 
-  get isMultiple() {
-    return Boolean(this.component.multiple);
-  }
-
-  get address() {
-    return this.manualModeEnabled && this.dataValue ? this.dataValue.address : this.dataValue;
-  }
-
-  set address(value) {
-    if (this.manualModeEnabled) {
-      this.dataValue.address = value;
-    } else {
-      this.dataValue = value;
-    }
-  }
-
-  get defaultValue() {
-    return super.defaultValue;
-  }
-
-  get defaultSchema() {
-    return { ...PlsPlusAddress.schema(),
-      tree: "true"
-    };
-  }
-
-  isValueInLegacyFormat(value) {
-    return value && !value.mode;
-  }
-
-  normalizeValue(value) {
-    return this.manualModeEnabled && this.isValueInLegacyFormat(value) ? {
-      mode: PlsPlusAddressMode.Autocomplete,
-      address: value
-    } : value;
-  }
-
-  setValue(value, flags = {}) {
-    const changed = Field.prototype.setValue.call(this, value, flags);
+  setValue(value) {
+    let flags = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    // const changed = Field.prototype.setValue.call(this, value, flags);
     this.restoreComponentsContext();
 
-    if (changed || !lodash_default().isEmpty(value) && flags.fromSubmission) {
-      this.redraw();
+    if (!lodash_default().isEmpty(value) && flags.fromSubmission) {
+      setTimeout(() => {
+        this.redraw();
+      });
     }
 
-    return changed;
+    return super.setValue(value, flags);
   }
 
   static get modeSwitcherRef() {
@@ -18230,6 +18241,8 @@ class PlsPlusAddress extends ContainerComponent {
   }
 
   get searchInputAttributes() {
+    var _this$component$provi, _this$component$provi2;
+
     const attr = {
       name: this.options.name,
       type: "text",
@@ -18242,7 +18255,7 @@ class PlsPlusAddress extends ContainerComponent {
       attr.placeholder = this.t(this.component.placeholder);
     }
 
-    if (this.disabled || this.manualMode || !this.component.providerOptions?.params?.apiKey) {
+    if (this.disabled || this.manualMode || !((_this$component$provi = this.component.providerOptions) !== null && _this$component$provi !== void 0 && (_this$component$provi2 = _this$component$provi.params) !== null && _this$component$provi2 !== void 0 && _this$component$provi2.apiKey)) {
       attr.disabled = "disabled";
     }
 
@@ -18260,15 +18273,34 @@ class PlsPlusAddress extends ContainerComponent {
   }
 
   renderElement(value) {
-    this.getComponents().forEach(component => {
-      component.disabled = !this.manualMode;
+    var _this$container3, _this$component$provi3, _this$component$provi4;
+
+    (_this$container3 = this.container) === null || _this$container3 === void 0 ? void 0 : _this$container3.getComponents().forEach(component => {
+      if (!this.builderMode && this.attached) {
+        component.disabled = component.originalComponent.disabled || !this.manualMode;
+        component.component.validate = !this.manualMode ? {} : component.originalComponent.validate;
+      }
 
       component.onChange = (flags, fromRoot) => {
-        this.dataValue.address.selectedAddress = this.composedAddress;
-        return super.onChange(flags, fromRoot);
+        if (flags.modified && component.originalComponent.tags.length) {
+          this.setAddressProp(component.originalComponent.tags[0], component.dataValue);
+        }
+
+        return this.onChange(flags, fromRoot);
       };
     });
-    this.component.validate.required = !this.manualMode;
+
+    if (!this.builderMode && this.attached) {
+      var _this$originalCompone, _this$originalCompone2;
+
+      this.component.validate = { ...(((_this$originalCompone = this.originalComponent) === null || _this$originalCompone === void 0 ? void 0 : (_this$originalCompone2 = _this$originalCompone.validate) === null || _this$originalCompone2 === void 0 ? void 0 : _this$originalCompone2.required) && {
+          custom: "valid = !!instance.address.selectedAddress;",
+          customMessage: "".concat(this.component.label, " is required."),
+          required: !this.manualMode
+        })
+      };
+    }
+
     return this.renderTemplate(this.templateName, {
       children: this.hasChildren ? this.renderComponents() : "",
       nestedKey: this.nestedKey,
@@ -18283,7 +18315,7 @@ class PlsPlusAddress extends ContainerComponent {
         autocomplete: this.autocompleteMode,
         manual: this.manualMode
       },
-      hasApiKey: !!this.component.providerOptions?.params?.apiKey
+      hasApiKey: !!((_this$component$provi3 = this.component.providerOptions) !== null && _this$component$provi3 !== void 0 && (_this$component$provi4 = _this$component$provi3.params) !== null && _this$component$provi4 !== void 0 && _this$component$provi4.apiKey)
     });
   }
 
@@ -18292,10 +18324,7 @@ class PlsPlusAddress extends ContainerComponent {
   }
 
   onSelectAddress(address, element, index) {
-    this.address.autocompleteAddress = address;
-    this.triggerChange({
-      modified: true
-    });
+    this.setAddressProp("autocompleteAddress", address);
 
     if (element) {
       element.value = this.getDisplayValue(this.address);
@@ -18343,18 +18372,13 @@ class PlsPlusAddress extends ContainerComponent {
             this.onSelectAddress(address, elem, index);
             this.provider.parseAddress(address).then(r => {
               this.address = { ...this.address,
-                ...this.provider.breakAddress(r)
+                ...this.provider.breakAddress(r),
+                mode: this.mode
               };
-              this.triggerChange({
-                modified: true
-              }); // setTimeout(() => {
-              //   this.restoreComponentsContext();
-              // }, 1000);
-
               this.restoreComponentsContext();
-              this.getComponents().forEach(component => {
-                const childElement = document.getElementById(`${component.id}-${component.component.key}`);
-                childElement.value = component.dataValue;
+              this.container.getComponents().forEach(component => {
+                const childElement = document.getElementById("".concat(component.id, "-").concat(component.component.key));
+                if (childElement) childElement.value = component.dataValue;
               });
             });
             this.redraw();
@@ -18367,15 +18391,6 @@ class PlsPlusAddress extends ContainerComponent {
 
           if (elem.value) {
             elem.value = this.getDisplayValue(this.address);
-          }
-        });
-        this.addEventListener(elem, "keyup", () => {
-          if (!elem) {
-            return;
-          }
-
-          if (!elem.value) {
-            this.clearAddress(elem, index);
           }
         });
       }
@@ -18392,11 +18407,9 @@ class PlsPlusAddress extends ContainerComponent {
         if (!this.builderMode) {
           if (this.manualMode) {
             this.restoreComponentsContext();
+          } else {
+            this.clearAddress(this.searchInput);
           }
-
-          this.triggerChange({
-            modified: true
-          });
         }
 
         this.redraw();
@@ -18408,7 +18421,9 @@ class PlsPlusAddress extends ContainerComponent {
         this.updateRemoveIcon(index);
 
         const removeValueHandler = () => {
-          const searchInput = this.searchInput?.[index];
+          var _this$searchInput;
+
+          const searchInput = (_this$searchInput = this.searchInput) === null || _this$searchInput === void 0 ? void 0 : _this$searchInput[index];
           this.clearAddress(searchInput, index);
 
           if (searchInput) {
@@ -18417,9 +18432,11 @@ class PlsPlusAddress extends ContainerComponent {
         };
 
         this.addEventListener(removeValueIcon, "click", removeValueHandler);
-        this.addEventListener(removeValueIcon, "keydown", ({
-          key
-        }) => {
+        this.addEventListener(removeValueIcon, "keydown", _ref => {
+          let {
+            key
+          } = _ref;
+
           if (key === "Enter") {
             removeValueHandler();
           }
@@ -18432,9 +18449,14 @@ class PlsPlusAddress extends ContainerComponent {
 
   redraw() {
     const modeSwitcherInFocus = this.modeSwitcher && document.activeElement === this.modeSwitcher;
+    const searchInputInFocus = this.searchInput && document.activeElement === this.searchInput;
     return super.redraw().then(result => {
       if (modeSwitcherInFocus && this.modeSwitcher) {
         this.modeSwitcher.focus();
+      }
+
+      if (searchInputInFocus && this.searchInput) {
+        this.searchInput.focus();
       }
 
       return result;
@@ -18442,34 +18464,31 @@ class PlsPlusAddress extends ContainerComponent {
   }
 
   clearAddress(element, index) {
-    if (!this.isEmpty()) {
-      this.triggerChange();
-    }
+    var _this$container4;
 
-    if (this.address?.[index]) {
-      this.address[index] = this.emptyValue.address;
-    } else {
-      this.address = this.emptyValue.address;
-    }
+    this.address = this.emptyValue.address;
 
     if (element) {
       element.value = "";
     }
 
-    this.getComponents().forEach(component => {
-      const childElement = document.getElementById(`${component.id}-${component.component.key}`);
-      if (childElement) childElement.value = this.address[component.component.key] || "";
+    (_this$container4 = this.container) === null || _this$container4 === void 0 ? void 0 : _this$container4.getComponents().forEach(component => {
+      const childElement = document.getElementById("".concat(component.id, "-").concat(component.component.key));
+      if (childElement) childElement.value = component.dataValue;
     });
     this.updateRemoveIcon(index);
     this.redraw();
   }
 
-  getDisplayValue(value = this.address) {
+  getDisplayValue() {
+    let value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.address;
     return this.provider ? this.provider.getDisplayValue(value) : "";
   }
 
   updateRemoveIcon(index) {
-    const removeValueIcon = this.removeValueIcon?.[index];
+    var _this$removeValueIcon;
+
+    const removeValueIcon = (_this$removeValueIcon = this.removeValueIcon) === null || _this$removeValueIcon === void 0 ? void 0 : _this$removeValueIcon[index];
 
     if (removeValueIcon) {
       const value = this.address;
@@ -18482,40 +18501,6 @@ class PlsPlusAddress extends ContainerComponent {
     }
   }
 
-  getValueAsString(value, options) {
-    if (!value) {
-      return "";
-    }
-
-    const normalizedValue = this.normalizeValue(value);
-    const {
-      address,
-      mode
-    } = this.manualModeEnabled ? normalizedValue : {
-      address: normalizedValue,
-      mode: PlsPlusAddressMode.Autocomplete
-    };
-    const valueInManualMode = mode === PlsPlusAddressMode.Manual;
-
-    if (this.provider && !valueInManualMode) {
-      return this.getDisplayValue(address);
-    }
-
-    if (valueInManualMode) {
-      if (this.component.manualModeViewString) {
-        return this.interpolate(this.component.manualModeViewString, {
-          address,
-          data: this.data,
-          component: this.component
-        });
-      }
-
-      return this.getComponents().filter(component => component.hasValue(address)).map(component => [component, lodash_default().get(address, component.key)]).filter(([component, componentValue]) => !component.isEmpty(componentValue)).map(([component, componentValue]) => component.getValueAsString(componentValue, options)).join(", ");
-    }
-
-    return super.getValueAsString(address, options);
-  }
-
   focus() {
     if (this.searchInput && this.searchInput[0]) {
       this.searchInput[0].focus();
@@ -18526,14 +18511,338 @@ class PlsPlusAddress extends ContainerComponent {
 PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/PlsPlusAddress/index.js
 
+;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/editFrom/PdfSubmitButton.edit.display.js
+/*
+ * use form.io Button component as boilerplate
+ * https://github.com/formio/formio.js/blob/master/src/components/button/editForm/Button.edit.display.js
+ *
+ */
+/* harmony default export */ const PdfSubmitButton_edit_display = ([{
+  type: "content",
+  html: "<h2>This component is still in development and not a stable version.</h2><h2>Please follow <a href=\"#\" target=\"_blank\">this guide</a> to setup the form action before using this component.</h2>",
+  input: false,
+  weight: -10
+}, {
+  key: "labelPosition",
+  ignore: true
+}, {
+  key: "placeholder",
+  ignore: true
+}, {
+  key: "hideLabel",
+  ignore: true
+}, {
+  key: "action",
+  ignore: true
+}, {
+  type: "textarea",
+  key: "downloadSuccessMessage",
+  label: "Download message if PDF generated successfully",
+  tooltip: "Message show up after form submission if PDF generated successfully.",
+  rows: 5,
+  input: true,
+  weight: 120,
+  editor: "ace",
+  as: "html"
+}, {
+  type: "textarea",
+  key: "downloadFailedMessage",
+  label: "Download message if PDF didn't generate",
+  tooltip: "Message show after form submission if PDF didn't generate.",
+  rows: 5,
+  input: true,
+  weight: 120,
+  editor: "ace",
+  as: "html"
+}, {
+  type: "textfield",
+  label: "Download message class if success",
+  key: "downloadSuccessMessageClass",
+  weight: 120,
+  tooltip: "Class name of the download message container.",
+  input: true,
+  placeholder: "eg. alert alert-success"
+}, {
+  type: "textfield",
+  label: "Download message class if success",
+  key: "downloadSuccessMessageClass",
+  weight: 120,
+  tooltip: "Class name of the download message container.",
+  input: true,
+  placeholder: "eg. alert alert-success"
+}, {
+  type: "textfield",
+  label: "Download message class if didn't generate PDF",
+  key: "downloadFailedMessageClass",
+  weight: 120,
+  tooltip: "Class name of the download message container.",
+  input: true,
+  placeholder: "eg. alert alert-success"
+}, {
+  type: "textfield",
+  label: "Download button label",
+  key: "downloadButtonLabel",
+  weight: 121,
+  tooltip: "Label of the download button.",
+  input: true,
+  placeholder: "Download"
+}, {
+  type: "textfield",
+  label: "Download button class",
+  key: "downloadButtonClass",
+  weight: 122,
+  tooltip: "Class name of the download button.",
+  input: true,
+  placeholder: "btn btn-primary"
+}, {
+  type: "textfield",
+  label: "Download button target",
+  key: "downloadButtonTarget",
+  weight: 123,
+  tooltip: "Link target of the download button.",
+  input: true,
+  placeholder: "_blank"
+}, {
+  type: "checkbox",
+  input: true,
+  inputType: "checkbox",
+  key: "saveOnEnter",
+  label: "Save On Enter",
+  weight: 113,
+  tooltip: "Use the Enter key to submit form.",
+  conditional: {
+    json: {
+      "===": [{
+        var: "data.action"
+      }, "submit"]
+    }
+  }
+}, {
+  type: "select",
+  key: "theme",
+  label: "Theme",
+  input: true,
+  tooltip: "The color theme of this button.",
+  dataSrc: "values",
+  weight: 140,
+  data: {
+    values: [{
+      label: "Primary",
+      value: "primary"
+    }, {
+      label: "Secondary",
+      value: "secondary"
+    }, {
+      label: "Info",
+      value: "info"
+    }, {
+      label: "Success",
+      value: "success"
+    }, {
+      label: "Danger",
+      value: "danger"
+    }, {
+      label: "Warning",
+      value: "warning"
+    }]
+  }
+}, {
+  type: "select",
+  key: "size",
+  label: "Size",
+  input: true,
+  tooltip: "The size of this button.",
+  dataSrc: "values",
+  weight: 150,
+  data: {
+    values: [{
+      label: "Small",
+      value: "sm"
+    }, {
+      label: "Medium",
+      value: "md"
+    }, {
+      label: "Large",
+      value: "lg"
+    }]
+  }
+}, {
+  type: "textfield",
+  key: "leftIcon",
+  label: "Left Icon",
+  input: true,
+  placeholder: "Enter icon classes",
+  tooltip: "This is the full icon class string to show the icon. Example: 'fa fa-plus'",
+  weight: 160
+}, {
+  type: "textfield",
+  key: "rightIcon",
+  label: "Right Icon",
+  input: true,
+  placeholder: "Enter icon classes",
+  tooltip: "This is the full icon class string to show the icon. Example: 'fa fa-plus'",
+  weight: 170
+}, {
+  type: "checkbox",
+  key: "block",
+  label: "Block Button",
+  input: true,
+  weight: 155,
+  tooltip: "This control should span the full width of the bounding container."
+}, {
+  type: "checkbox",
+  key: "disableOnInvalid",
+  label: "Disable on Form Invalid",
+  tooltip: "This will disable this field if the form is invalid.",
+  input: true,
+  weight: 620
+}]);
+;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/PdfSubmitButton.form.js
+/*
+ * use form.io Button component as boilerplate
+ * https://github.com/formio/formio.js/blob/master/src/components/button/Button.form.js
+ *
+ */
+
+const PdfSubmitButton_form_baseEditForm = Formio.Components.components.base.editForm;
+/* harmony default export */ const PdfSubmitButton_form = (function () {
+  for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+    extend[_key] = arguments[_key];
+  }
+
+  return PdfSubmitButton_form_baseEditForm([{
+    key: "display",
+    components: PdfSubmitButton_edit_display
+  }, {
+    key: "data",
+    ignore: true
+  }, {
+    key: "validation",
+    ignore: true
+  }, {
+    key: "addons",
+    ignore: true
+  }], ...extend);
+});
+;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/PdfSubmitButton.js
+/*
+ * inherit button component
+ * https://github.com/formio/formio.js/blob/master/src/components/button/Button.js
+ *
+ */
+
+const Button = Formio.Components.components.button;
+class PdfSubmitButton extends Button {
+  static schema() {
+    for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+      extend[_key] = arguments[_key];
+    }
+
+    return Button.schema({
+      type: "pdfsubmitbutton",
+      label: "Submit",
+      key: "pdfsubmitbutton",
+      downloadSuccessMessage: "",
+      downloadFailedMessage: "",
+      downloadButtonLabel: undefined,
+      downloadButtonClass: undefined,
+      downloadButtonTarget: undefined,
+      downloadSuccessMessageClass: undefined,
+      downloadFailedMessageClass: undefined,
+      // props below are for debugging in storybook
+      debugMode: false,
+      debugPdfUrl: "",
+      ...extend
+    });
+  }
+
+  init() {
+    var _this$root, _this$root$options;
+
+    // hide the default submit button if it is a wizard
+    if ((_this$root = this.root) !== null && _this$root !== void 0 && (_this$root$options = _this$root.options) !== null && _this$root$options !== void 0 && _this$root$options.buttonSettings) this.root.options.buttonSettings.showSubmit = false;
+    super.init();
+  }
+
+  attachButton() {
+    super.attachButton();
+
+    if (this.component.action === "submit") {
+      this.on(this.component.debugMode ? "submit" : "submitDone", e => {
+        var _e$metadata, _e$metadata$pdfUrl;
+
+        // get the pdf DownloadUrl from submission response, the action name setup in the form needed to be `pdfUrl`
+        const pdfUrl = this.component.debugMode ? this.component.debugPdfUrl : e === null || e === void 0 ? void 0 : (_e$metadata = e.metadata) === null || _e$metadata === void 0 ? void 0 : (_e$metadata$pdfUrl = _e$metadata.pdfUrl) === null || _e$metadata$pdfUrl === void 0 ? void 0 : _e$metadata$pdfUrl.DownloadUrl;
+        const {
+          downloadSuccessMessage,
+          downloadFailedMessage,
+          downloadButtonClass,
+          downloadButtonLabel,
+          downloadButtonTarget,
+          downloadSuccessMessageClass,
+          downloadFailedMessageClass
+        } = this.component; // setup default settings for download button
+
+        const className = downloadButtonClass !== undefined ? downloadButtonClass : "btn btn-primary";
+        const target = downloadButtonTarget !== undefined ? downloadButtonTarget : "_blank";
+        const label = downloadButtonLabel !== undefined ? downloadButtonLabel : "Download";
+        const successMessageClass = downloadSuccessMessageClass || "";
+        const failedMessageClass = downloadFailedMessageClass || ""; // replace form div container with downloadSuccessMessage
+
+        if (pdfUrl) {
+          this.root.element.innerHTML = "\n              <div class=\"".concat(successMessageClass, "\">\n                ").concat(downloadSuccessMessage ? "<div class=\"mb-3 download-success-message-container\">".concat(downloadSuccessMessage, "</div>") : "", "\n                <div class=\"download-button-container\">\n                  <a href=\"").concat(pdfUrl, "\" class=\"").concat(className, "\" target=\"").concat(target, "\" />\n                    ").concat(label, "\n                  </a>\n                </div>\n              </div>\n            ");
+        } else {
+          this.root.element.innerHTML = "\n              <div class=\"".concat(failedMessageClass, "\">\n                <div class=\"download-failed-message-container\">\n                  ").concat(downloadFailedMessage, "\n                </div>\n              </div>\n            ");
+        }
+
+        this.root.element.scrollIntoView();
+      }, true);
+    }
+  }
+
+  static get builderInfo() {
+    return {
+      title: "PdfSubmitButton",
+      group: "custom",
+      icon: "fa-solid fa-file",
+      documentation: "/userguide/#button",
+      weight: 2,
+      schema: { ...PdfSubmitButton.schema()
+      }
+    };
+  }
+
+}
+PdfSubmitButton.editForm = PdfSubmitButton_form;
+;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/index.js
+
 ;// CONCATENATED MODULE: ./src/components/index.js
+/*
+ * this file is used for prod environment for bundling
+ *
+ */
 
 
+;// CONCATENATED MODULE: ./src/templates/bootstrap/boilerplateButton/form.ejs
+/* harmony default export */ const boilerplateButton_form = ("<!--\n  boilerplate from https://github.com/formio/formio.js/blob/master/src/templates/bootstrap/button/form.ejs\n-->\n<div class=\"mb-2\">\n  {{ctx.component.customDescription}}\n</div>\n<{{ctx.input.type}}\n  ref=\"button\"\n  {% for (var attr in ctx.input.attr) { %}\n  {{attr}}=\"{{ctx.input.attr[attr]}}\"\n  {% } %}\n  {% if (ctx.component.description) { %}\n    aria-describedby=\"d-{{ctx.instance.id}}-{{ctx.component.key}}\"\n  {% } %}\n>\n{% if (ctx.component.leftIcon) { %}<span class=\"{{ctx.component.leftIcon}}\"></span>&nbsp;{% } %}\n{{ctx.input.content}}\n{% if (ctx.component.tooltip) { %}\n  <i ref=\"tooltip\" class=\"{{ctx.iconClass('question-sign')}} text-muted\" data-tooltip=\"{{ctx.component.tooltip}}\"></i>\n{% } %}\n{% if (ctx.component.rightIcon) { %}&nbsp;<span class=\"{{ctx.component.rightIcon}}\"></span>{% } %}\n</div{{ctx.input.type}}>\n<div ref=\"buttonMessageContainer\">\n  <span class=\"help-block\" ref=\"buttonMessage\"></span>\n</div>\n");
+;// CONCATENATED MODULE: ./src/templates/bootstrap/boilerplateButton/html.ejs
+/* harmony default export */ const html = ("<!--\n  boilerplate from https://github.com/formio/formio.js/blob/master/src/templates/bootstrap/button/html.ejs\n-->");
+;// CONCATENATED MODULE: ./src/templates/bootstrap/boilerplateButton/index.js
+/*
+ * use form.io button template as BoilerplateButton
+ * https://github.com/formio/formio.js/blob/master/src/templates/bootstrap/button/index.js
+ *
+ */
 
+
+const boilerplateButton = {
+  form: boilerplateButton_form,
+  html: html
+};
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/plsPlusAddress/form.ejs
-/* harmony default export */ const plsPlusAddress_form = ("<div class=\"address-autocomplete-container\">\n  <input\n    ref=\"{{ ctx.ref.searchInput }}\"\n    {% for (var attr in ctx.inputAttributes) { %}\n      {{attr}}=\"{{ctx.inputAttributes[attr]}}\"\n    {% } %}\n    value=\"{{ ctx.displayValue }}\"\n    autocomplete=\"off\"\n    aria-label=\"{{ctx.t('autocomplete')}}\"\n  >\n  {% if (!ctx.component.disableClearIcon) { %}\n    <i\n      class=\"address-autocomplete-remove-value-icon fa fa-times\"\n      tabindex=\"{{ ctx.inputAttributes.tabindex }}\"\n      ref=\"{{ ctx.ref.removeValueIcon }}\"\n    ></i>\n  {% } %}\n</div>\n{% if (!ctx.hasApiKey) { %}\n    <div class=\"form-text\">Please provide an API key in Provider to use the search function.</div>\n{% } %}\n{% if (ctx.self.manualModeEnabled) { %}\n  <div class=\"form-check checkbox\">\n    <label class=\"form-check-label\">\n      <input\n        ref=\"{{ ctx.ref.modeSwitcher }}\"\n        type=\"checkbox\"\n        class=\"form-check-input\"\n        tabindex=\"{{ ctx.inputAttributes.tabindex }}\"\n        {% if (ctx.mode.manual) { %}checked=true{% } %}\n        {% if (ctx.disabled) { %}disabled=true{% } %}\n      >\n      <span>{{ ctx.component.switchToManualModeLabel }}</span>\n    </label>\n  </div>\n{% } %}\n{% if (ctx.self.manualModeEnabled && ( ctx.mode.manual || ctx.displayValue)) { %}\n  <div ref=\"{{ ctx.nestedKey }}\">\n    {{ ctx.children }}\n  </div>\n{% } %}\n{% if (ctx.mode.manual) { %}\n<div>\n  <!-- Todo Link/function to improve the address database -->\n  <!-- <p><a href=\"#\" target=\"_blank\">Please take part to improve our address database if we couldn't find your address.</a></p> -->\n</div>\n{% } %}");
+/* harmony default export */ const plsPlusAddress_form = ("<div class=\"address-autocomplete-container\">\n  <input\n    ref=\"{{ ctx.ref.searchInput }}\"\n    {% for (var attr in ctx.inputAttributes) { %}\n      {{attr}}=\"{{ctx.inputAttributes[attr]}}\"\n    {% } %}\n    value=\"{{ ctx.displayValue }}\"\n    autocomplete=\"off\"\n    aria-label=\"{{ctx.t('autocomplete')}}\"\n  >\n  {% if (!ctx.component.disableClearIcon) { %}\n    <i\n      class=\"address-autocomplete-remove-value-icon fa fa-times\"\n      tabindex=\"{{ ctx.inputAttributes.tabindex }}\"\n      ref=\"{{ ctx.ref.removeValueIcon }}\"\n    ></i>\n  {% } %}\n</div>\n{% if (!ctx.hasApiKey) { %}\n    <div class=\"form-text\">Please provide an API key in Provider to use the search function.</div>\n{% } %}\n{% if (ctx.self.manualModeEnabled) { %}\n  <div class=\"form-check checkbox\">\n    <label class=\"form-check-label\">\n      <input\n        ref=\"{{ ctx.ref.modeSwitcher }}\"\n        type=\"checkbox\"\n        class=\"form-check-input\"\n        tabindex=\"{{ ctx.inputAttributes.tabindex }}\"\n        {% if (ctx.mode.manual) { %}checked=true{% } %}\n        {% if (ctx.disabled) { %}disabled=true{% } %}\n      >\n      <span>{{ ctx.component.switchToManualModeLabel }}</span>\n    </label>\n  </div>\n{% } %}\n{% if (ctx.self.manualModeEnabled && ( ctx.mode.manual || ctx.displayValue)) { %}\n  <div ref=\"{{ ctx.nestedKey }}\" class=\"address-nested\">\n    {{ ctx.children }}\n  </div>\n{% } %}\n{% if (ctx.mode.manual) { %}\n<div>\n  <!-- Todo Link/function to improve the address database -->\n  <!-- <p><a href=\"#\" target=\"_blank\">Please take part to improve our address database if we couldn't find your address.</a></p> -->\n</div>\n{% } %}");
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/plsPlusAddress/html.ejs
-/* harmony default export */ const html = ("<div ref=\"value\">{% if (ctx.displayValue) { %}{{ctx.displayValue}}{% } else { %}-{% } %}</div>");
+/* harmony default export */ const plsPlusAddress_html = ("<div ref=\"value\">{% if (ctx.displayValue) { %}{{ctx.displayValue}}{% } else { %}-{% } %}</div>");
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/plsPlusAddress/index.js
 /*
  * use form.io Address template as boilerplate
@@ -18544,14 +18853,16 @@ PlsPlusAddress.editForm = PlsPlusAddress_form;
 
 const plsPlusAddress = {
   form: plsPlusAddress_form,
-  html: html
+  html: plsPlusAddress_html
 };
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/index.js
+
 
 ;// CONCATENATED MODULE: ./src/templates/index.js
 
 /* harmony default export */ const templates = ({
-  bootstrap: bootstrap_namespaceObject
+  bootstrap: bootstrap_namespaceObject,
+  bootstrap3: bootstrap_namespaceObject
 });
 ;// CONCATENATED MODULE: ./src/providers/address/PlsPlusAddressProvider.js
 
@@ -18635,11 +18946,13 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
   }
 
   breakAddress(address) {
+    var _address$Parcel, _address$Unit, _address$Unit2, _address$Level, _address$Level2, _address$RoadNumber, _address$RoadNumber2, _address$RoadNumber3, _address$Road, _address$Road2, _address$Road3;
+
     const siteName = address.SiteName || "";
-    const lot = address.Parcel?.Lot ? `LOT ${address.Parcel.Lot}` : undefined;
-    const complexDesc = [lot, address.Unit?.TypeCode, address.Unit?.Number, address.Level?.TypeCode, address.Level?.Number].filter(o => o !== undefined).join(" ");
-    const roadNumberPart = [address.RoadNumber?.First, address.RoadNumber?.Last ? "-" : undefined, address.RoadNumber?.Last].filter(o => o !== undefined).join("");
-    const streetAddress = [roadNumberPart, address.Road?.Name, address.Road?.TypeCode, address.Road?.Suffix].filter(o => o !== undefined).join(" ");
+    const lot = (_address$Parcel = address.Parcel) !== null && _address$Parcel !== void 0 && _address$Parcel.Lot ? "LOT ".concat(address.Parcel.Lot) : undefined;
+    const complexDesc = [lot, (_address$Unit = address.Unit) === null || _address$Unit === void 0 ? void 0 : _address$Unit.TypeCode, (_address$Unit2 = address.Unit) === null || _address$Unit2 === void 0 ? void 0 : _address$Unit2.Number, (_address$Level = address.Level) === null || _address$Level === void 0 ? void 0 : _address$Level.TypeCode, (_address$Level2 = address.Level) === null || _address$Level2 === void 0 ? void 0 : _address$Level2.Number].filter(o => o !== undefined).join(" ");
+    const roadNumberPart = [(_address$RoadNumber = address.RoadNumber) === null || _address$RoadNumber === void 0 ? void 0 : _address$RoadNumber.First, (_address$RoadNumber2 = address.RoadNumber) !== null && _address$RoadNumber2 !== void 0 && _address$RoadNumber2.Last ? "-" : undefined, (_address$RoadNumber3 = address.RoadNumber) === null || _address$RoadNumber3 === void 0 ? void 0 : _address$RoadNumber3.Last].filter(o => o !== undefined).join("");
+    const streetAddress = [roadNumberPart, (_address$Road = address.Road) === null || _address$Road === void 0 ? void 0 : _address$Road.Name, (_address$Road2 = address.Road) === null || _address$Road2 === void 0 ? void 0 : _address$Road2.TypeCode, (_address$Road3 = address.Road) === null || _address$Road3 === void 0 ? void 0 : _address$Road3.Suffix].filter(o => o !== undefined).join(" ");
     const addressLine = {
       siteName,
       lot,
@@ -18660,13 +18973,15 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
     };
   }
 
-  makeParseRequest(options = {}) {
+  makeParseRequest() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     return Formio.makeStaticRequest(this.getParseRequestUrl(options), "GET", null, {
       noToken: true
     });
   }
 
-  parseAddress(query, options = {}) {
+  parseAddress(query) {
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const requestOptions = this.getRequestOptions(options);
     const params = requestOptions.params || {};
     params[this.queryProperty] = query.trim();
@@ -18678,7 +18993,8 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
     });
   }
 
-  search(query, options = {}) {
+  search(query) {
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const requestOptions = this.getRequestOptions(options);
     const params = requestOptions.params || {};
     params[this.queryProperty] = query.trim();
@@ -18689,20 +19005,22 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
     return lodash_default().isEmpty(address) ? "" : lodash_default().get(address, this.displayValueProperty, "");
   }
 
-  getRequestUrl(options = {}) {
+  getRequestUrl() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     const {
       params,
       apiBase
     } = options;
-    return `${apiBase || defaultApiBase}/pls-plus-qg/AutoCompleteAddress?${this.serialize(params)}`;
+    return "".concat(apiBase || defaultApiBase, "/pls-plus-qg/AutoCompleteAddress?").concat(this.serialize(params));
   }
 
-  getParseRequestUrl(options = {}) {
+  getParseRequestUrl() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     const {
       params,
       apiBase
     } = options;
-    return `${apiBase || defaultApiBase}/pls-plus-qg/ParseAddress?${this.serialize(params)}`;
+    return "".concat(apiBase || defaultApiBase, "/pls-plus-qg/ParseAddress?").concat(this.serialize(params));
   }
 
 }
@@ -18724,7 +19042,6 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
 
 
 
- // import "./style/formio-qld.scss";
 
 Formio.use({
   components: getComponents(components_namespaceObject),
