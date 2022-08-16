@@ -167,8 +167,8 @@ const pushDataLayer = data => {
     pushDataLayer({
       event: "ngErrorEvent",
       ngErrorLocation: form._form.title,
-      ngErrorMsg: "submission error",
-      ngErrorStack: (error === null || error === void 0 ? void 0 : error.message) || error
+      ngErrorMsg: (error === null || error === void 0 ? void 0 : error.message) || error,
+      ngErrorStack: ""
     });
   });
 });
