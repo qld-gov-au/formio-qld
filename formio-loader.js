@@ -150,7 +150,8 @@ const pushDataLayer = data => {
 
   form.on("applicationSubmit", () => {
     form.submit();
-  });
+  }); // in a form submission, it will either fire `submitDone` or `submitError`, after getting the response from the formio api.
+
   form.on("submitDone", () => {
     pushDataLayer({
       event: "formio-submission",
@@ -160,7 +161,7 @@ const pushDataLayer = data => {
     });
     if (formConfirmation) setTimeout(() => {
       window.location.href = formConfirmation;
-    }, 200);
+    }, 500);
   });
   form.on("submitError", error => {
     pushDataLayer({
