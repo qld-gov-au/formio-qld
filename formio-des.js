@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["FormioQld"] = factory();
+		exports["FormioQldDes"] = factory();
 	else
-		root["FormioQld"] = factory();
+		root["FormioQldDes"] = factory();
 })(self, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
@@ -17735,12 +17735,11 @@ var __webpack_exports__ = {};
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// NAMESPACE OBJECT: ./src/components/index.js
-var components_namespaceObject = {};
-__webpack_require__.r(components_namespaceObject);
-__webpack_require__.d(components_namespaceObject, {
+// NAMESPACE OBJECT: ./src/components/index.des.js
+var index_des_namespaceObject = {};
+__webpack_require__.r(index_des_namespaceObject);
+__webpack_require__.d(index_des_namespaceObject, {
   "Location": () => (Location),
-  "PdfSubmitButton": () => (PdfSubmitButton),
   "PlsPlusAddress": () => (PlsPlusAddress)
 });
 
@@ -17765,311 +17764,6 @@ const getComponents = components => {
   });
   return customComponents;
 };
-;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/editFrom/PdfSubmitButton.edit.display.js
-/*
- * use form.io Button component as boilerplate
- * https://github.com/formio/formio.js/blob/master/src/components/button/editForm/Button.edit.display.js
- *
- */
-/* harmony default export */ const PdfSubmitButton_edit_display = ([{
-  type: "content",
-  html: "<h2>This component is still in development and not a stable version.</h2><h2>Please follow <a href=\"#\" target=\"_blank\">this guide</a> to setup the form action before using this component.</h2>",
-  input: false,
-  weight: -10
-}, {
-  key: "labelPosition",
-  ignore: true
-}, {
-  key: "placeholder",
-  ignore: true
-}, {
-  key: "hideLabel",
-  ignore: true
-}, {
-  key: "action",
-  ignore: true
-}, {
-  type: "textarea",
-  key: "downloadSuccessMessage",
-  label: "Download message if PDF generated successfully",
-  tooltip: "Message show up after form submission if PDF generated successfully.",
-  rows: 5,
-  input: true,
-  weight: 120,
-  editor: "ace",
-  as: "html"
-}, {
-  type: "textarea",
-  key: "downloadFailedMessage",
-  label: "Download message if PDF didn't generate",
-  tooltip: "Message show after form submission if PDF didn't generate.",
-  rows: 5,
-  input: true,
-  weight: 120,
-  editor: "ace",
-  as: "html"
-}, {
-  type: "textfield",
-  label: "Download message class if success",
-  key: "downloadSuccessMessageClass",
-  weight: 120,
-  tooltip: "Class name of the download message container.",
-  input: true,
-  placeholder: "eg. alert alert-success"
-}, {
-  type: "textfield",
-  label: "Download message class if success",
-  key: "downloadSuccessMessageClass",
-  weight: 120,
-  tooltip: "Class name of the download message container.",
-  input: true,
-  placeholder: "eg. alert alert-success"
-}, {
-  type: "textfield",
-  label: "Download message class if didn't generate PDF",
-  key: "downloadFailedMessageClass",
-  weight: 120,
-  tooltip: "Class name of the download message container.",
-  input: true,
-  placeholder: "eg. alert alert-success"
-}, {
-  type: "textfield",
-  label: "Download button label",
-  key: "downloadButtonLabel",
-  weight: 121,
-  tooltip: "Label of the download button.",
-  input: true,
-  placeholder: "Download"
-}, {
-  type: "textfield",
-  label: "Download button class",
-  key: "downloadButtonClass",
-  weight: 122,
-  tooltip: "Class name of the download button.",
-  input: true,
-  placeholder: "btn btn-primary"
-}, {
-  type: "textfield",
-  label: "Download button target",
-  key: "downloadButtonTarget",
-  weight: 123,
-  tooltip: "Link target of the download button.",
-  input: true,
-  placeholder: "_blank"
-}, {
-  type: "checkbox",
-  input: true,
-  inputType: "checkbox",
-  key: "saveOnEnter",
-  label: "Save On Enter",
-  weight: 113,
-  tooltip: "Use the Enter key to submit form.",
-  conditional: {
-    json: {
-      "===": [{
-        var: "data.action"
-      }, "submit"]
-    }
-  }
-}, {
-  type: "select",
-  key: "theme",
-  label: "Theme",
-  input: true,
-  tooltip: "The color theme of this button.",
-  dataSrc: "values",
-  weight: 140,
-  data: {
-    values: [{
-      label: "Primary",
-      value: "primary"
-    }, {
-      label: "Secondary",
-      value: "secondary"
-    }, {
-      label: "Info",
-      value: "info"
-    }, {
-      label: "Success",
-      value: "success"
-    }, {
-      label: "Danger",
-      value: "danger"
-    }, {
-      label: "Warning",
-      value: "warning"
-    }]
-  }
-}, {
-  type: "select",
-  key: "size",
-  label: "Size",
-  input: true,
-  tooltip: "The size of this button.",
-  dataSrc: "values",
-  weight: 150,
-  data: {
-    values: [{
-      label: "Small",
-      value: "sm"
-    }, {
-      label: "Medium",
-      value: "md"
-    }, {
-      label: "Large",
-      value: "lg"
-    }]
-  }
-}, {
-  type: "textfield",
-  key: "leftIcon",
-  label: "Left Icon",
-  input: true,
-  placeholder: "Enter icon classes",
-  tooltip: "This is the full icon class string to show the icon. Example: 'fa fa-plus'",
-  weight: 160
-}, {
-  type: "textfield",
-  key: "rightIcon",
-  label: "Right Icon",
-  input: true,
-  placeholder: "Enter icon classes",
-  tooltip: "This is the full icon class string to show the icon. Example: 'fa fa-plus'",
-  weight: 170
-}, {
-  type: "checkbox",
-  key: "block",
-  label: "Block Button",
-  input: true,
-  weight: 155,
-  tooltip: "This control should span the full width of the bounding container."
-}, {
-  type: "checkbox",
-  key: "disableOnInvalid",
-  label: "Disable on Form Invalid",
-  tooltip: "This will disable this field if the form is invalid.",
-  input: true,
-  weight: 620
-}]);
-;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/PdfSubmitButton.form.js
-/*
- * use form.io Button component as boilerplate
- * https://github.com/formio/formio.js/blob/master/src/components/button/Button.form.js
- *
- */
-
-const baseEditForm = Formio.Components.components.base.editForm;
-/* harmony default export */ const PdfSubmitButton_form = (function () {
-  for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
-    extend[_key] = arguments[_key];
-  }
-
-  return baseEditForm([{
-    key: "display",
-    components: PdfSubmitButton_edit_display
-  }, {
-    key: "data",
-    ignore: true
-  }, {
-    key: "validation",
-    ignore: true
-  }, {
-    key: "addons",
-    ignore: true
-  }], ...extend);
-});
-;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/PdfSubmitButton.js
-/*
- * inherit button component
- * https://github.com/formio/formio.js/blob/master/src/components/button/Button.js
- *
- */
-
-const Button = Formio.Components.components.button;
-class PdfSubmitButton extends Button {
-  static schema() {
-    for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
-      extend[_key] = arguments[_key];
-    }
-
-    return Button.schema({
-      type: "pdfsubmitbutton",
-      label: "Submit",
-      key: "pdfsubmitbutton",
-      downloadSuccessMessage: "",
-      downloadFailedMessage: "",
-      downloadButtonLabel: undefined,
-      downloadButtonClass: undefined,
-      downloadButtonTarget: undefined,
-      downloadSuccessMessageClass: undefined,
-      downloadFailedMessageClass: undefined,
-      // props below are for debugging in storybook
-      debugMode: false,
-      debugPdfUrl: "",
-      ...extend
-    });
-  }
-
-  init() {
-    var _this$root, _this$root$options;
-
-    // hide the default submit button if it is a wizard
-    if ((_this$root = this.root) !== null && _this$root !== void 0 && (_this$root$options = _this$root.options) !== null && _this$root$options !== void 0 && _this$root$options.buttonSettings) this.root.options.buttonSettings.showSubmit = false;
-    super.init();
-  }
-
-  attachButton() {
-    super.attachButton();
-
-    if (this.component.action === "submit") {
-      this.on(this.component.debugMode ? "submit" : "submitDone", e => {
-        var _e$metadata, _e$metadata$pdfUrl;
-
-        // get the pdf DownloadUrl from submission response, the action name setup in the form needed to be `pdfUrl`
-        const pdfUrl = this.component.debugMode ? this.component.debugPdfUrl : e === null || e === void 0 ? void 0 : (_e$metadata = e.metadata) === null || _e$metadata === void 0 ? void 0 : (_e$metadata$pdfUrl = _e$metadata.pdfUrl) === null || _e$metadata$pdfUrl === void 0 ? void 0 : _e$metadata$pdfUrl.DownloadUrl;
-        const {
-          downloadSuccessMessage,
-          downloadFailedMessage,
-          downloadButtonClass,
-          downloadButtonLabel,
-          downloadButtonTarget,
-          downloadSuccessMessageClass,
-          downloadFailedMessageClass
-        } = this.component; // setup default settings for download button
-
-        const className = downloadButtonClass !== undefined ? downloadButtonClass : "btn btn-primary";
-        const target = downloadButtonTarget !== undefined ? downloadButtonTarget : "_blank";
-        const label = downloadButtonLabel !== undefined ? downloadButtonLabel : "Download";
-        const successMessageClass = downloadSuccessMessageClass || "";
-        const failedMessageClass = downloadFailedMessageClass || ""; // replace form div container with downloadSuccessMessage
-
-        if (pdfUrl) {
-          this.root.element.innerHTML = "\n              <div class=\"".concat(successMessageClass, "\">\n                ").concat(downloadSuccessMessage ? "<div class=\"mb-3 download-success-message-container\">".concat(downloadSuccessMessage, "</div>") : "", "\n                <div class=\"download-button-container\">\n                  <a href=\"").concat(pdfUrl, "\" class=\"").concat(className, "\" target=\"").concat(target, "\" />\n                    ").concat(label, "\n                  </a>\n                </div>\n              </div>\n            ");
-        } else {
-          this.root.element.innerHTML = "\n              <div class=\"".concat(failedMessageClass, "\">\n                <div class=\"download-failed-message-container\">\n                  ").concat(downloadFailedMessage, "\n                </div>\n              </div>\n            ");
-        }
-
-        this.root.element.scrollIntoView();
-      }, true);
-    }
-  }
-
-  static get builderInfo() {
-    return {
-      title: "PdfSubmitButton",
-      group: "custom",
-      icon: "fa-solid fa-file",
-      documentation: "/userguide/#button",
-      weight: 2,
-      schema: { ...PdfSubmitButton.schema()
-      }
-    };
-  }
-
-}
-PdfSubmitButton.editForm = PdfSubmitButton_form;
-;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/index.js
-
 // EXTERNAL MODULE: ./node_modules/autocompleter/autocomplete.js
 var autocomplete = __webpack_require__(338);
 var autocomplete_default = /*#__PURE__*/__webpack_require__.n(autocomplete);
@@ -18161,13 +17855,13 @@ var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
 
 
 
-const PlsPlusAddress_form_baseEditForm = Formio.Components.components.base.editForm;
+const baseEditForm = Formio.Components.components.base.editForm;
 /* harmony default export */ const PlsPlusAddress_form = (function () {
   for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
     extend[_key] = arguments[_key];
   }
 
-  return PlsPlusAddress_form_baseEditForm([{
+  return baseEditForm([{
     key: "data",
     components: PlsPlusAddress_edit_data
   }, {
@@ -19039,12 +18733,13 @@ Location.editForm = Location_form; // Register the component to the Formio.Compo
 // Formio.Components.addComponent("location", Location);
 ;// CONCATENATED MODULE: ./src/components/location/index.js
 
-;// CONCATENATED MODULE: ./src/components/index.js
+;// CONCATENATED MODULE: ./src/components/index.des.js
 /*
- * this file is used for prod environment for bundling
+ * this file is used for dev environment for storybook and testing
  *
  */
-
+// export * from "./BoilerplateButton";
+// export * from "./PdfSubmitButton";
  // export * from "./PlsPlusAddressWithMap";
 // export * from "./SSOButton";
 
@@ -19269,7 +18964,7 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
 /* harmony default export */ const providers = ({
   address: address
 });
-;// CONCATENATED MODULE: ./src/index.js
+;// CONCATENATED MODULE: ./src/index.des.js
 // the import below is the ie11 polyfill, uncomment to add back in
 // import "core-js/stable";
 // import "regenerator-runtime/runtime";
@@ -19279,8 +18974,7 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
 
 
 Formio.use({
-  components: getComponents(components_namespaceObject),
-  // load components by lower casing import name
+  components: getComponents(index_des_namespaceObject),
   templates: templates,
   providers: providers,
   options: (build_options_default())
