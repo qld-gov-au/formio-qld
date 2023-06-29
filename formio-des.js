@@ -17739,7 +17739,7 @@ __webpack_require__.r(__webpack_exports__);
 var index_des_namespaceObject = {};
 __webpack_require__.r(index_des_namespaceObject);
 __webpack_require__.d(index_des_namespaceObject, {
-  "Location": () => (Location),
+  "GoogleLocation": () => (GoogleLocation),
   "PlsPlusAddress": () => (PlsPlusAddress)
 });
 
@@ -17748,7 +17748,8 @@ var bootstrap_namespaceObject = {};
 __webpack_require__.r(bootstrap_namespaceObject);
 __webpack_require__.d(bootstrap_namespaceObject, {
   "boilerplateButton": () => (boilerplateButton),
-  "map": () => (map),
+  "googleMap": () => (googleMap),
+  "leafMap": () => (leafMap),
   "plsPlusAddress": () => (plsPlusAddress)
 });
 
@@ -18514,7 +18515,7 @@ class PlsPlusAddress extends FieldsetComponent {
 PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/PlsPlusAddress/index.js
 
-;// CONCATENATED MODULE: ./src/components/location/editForm/Location.edit.map.js
+;// CONCATENATED MODULE: ./src/components/googleLocation/editForm/Location.edit.map.js
 /* harmony default export */ const Location_edit_map = ([{
   type: "textfield",
   input: true,
@@ -18539,34 +18540,34 @@ PlsPlusAddress.editForm = PlsPlusAddress_form;
   tooltip: "This is the Google Maps ID you wish to use when showing the location map.",
   weight: 20
 }]);
-;// CONCATENATED MODULE: ./src/components/location/Location.form.js
+;// CONCATENATED MODULE: ./src/components/googleLocation/GoogleLocation.form.js
 
-const Location_form_baseEditForm = Formio.Components.components.base.editForm;
-/* harmony default export */ function Location_form() {
+const GoogleLocation_form_baseEditForm = Formio.Components.components.base.editForm;
+/* harmony default export */ function GoogleLocation_form() {
   for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
     extend[_key] = arguments[_key];
   }
 
-  return Location_form_baseEditForm([{
+  return GoogleLocation_form_baseEditForm([{
     label: "Map",
     key: "map",
     weight: 1,
     components: Location_edit_map
   }], ...extend);
 }
-;// CONCATENATED MODULE: ./src/components/location/Location.js
+;// CONCATENATED MODULE: ./src/components/googleLocation/GoogleLocation.js
 /* global google */
 
 const TextFieldComponent = Formio.Components.components.textfield;
-class Location extends TextFieldComponent {
+class GoogleLocation extends TextFieldComponent {
   static schema() {
     for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
       extend[_key] = arguments[_key];
     }
 
     return TextFieldComponent.schema({
-      type: "location",
-      label: "Location",
+      type: "googlelocation",
+      label: "Google Location",
       key: "location",
       map: {
         key: "",
@@ -18579,11 +18580,11 @@ class Location extends TextFieldComponent {
 
   static get builderInfo() {
     return {
-      title: "Location",
+      title: "Google Location",
       group: "custom",
       icon: "map",
       weight: 36,
-      schema: Location.schema()
+      schema: GoogleLocation.schema()
     };
   }
 
@@ -18603,7 +18604,7 @@ class Location extends TextFieldComponent {
   }
 
   get defaultSchema() {
-    return Location.schema();
+    return GoogleLocation.schema();
   }
 
   get emptyValue() {
@@ -18617,7 +18618,7 @@ class Location extends TextFieldComponent {
   }
 
   renderElement(value, index) {
-    return super.renderElement(value, index) + this.renderTemplate("map", {
+    return super.renderElement(value, index) + this.renderTemplate("googleMap", {
       mapId: this.component.map.gmapId
     });
   }
@@ -18728,10 +18729,10 @@ class Location extends TextFieldComponent {
   }
 
 }
-Location.editForm = Location_form; // Register the component to the Formio.Components registry.
+GoogleLocation.editForm = GoogleLocation_form; // Register the component to the Formio.Components registry.
 // This is not required as we dynamicly load them based on lower
-// Formio.Components.addComponent("location", Location);
-;// CONCATENATED MODULE: ./src/components/location/index.js
+// Formio.Components.addComponent("location", GoogleLocation);
+;// CONCATENATED MODULE: ./src/components/googleLocation/index.js
 
 ;// CONCATENATED MODULE: ./src/components/index.des.js
 /*
@@ -18776,16 +18777,24 @@ const plsPlusAddress = {
   form: plsPlusAddress_form,
   html: plsPlusAddress_html
 };
-;// CONCATENATED MODULE: ./src/templates/bootstrap/map/form.ejs
-/* harmony default export */ const map_form = ("<div id=\"{{ctx.mapId}}\" style=\"min-height: 300px; height: calc(100vh - 600px);\" ref=\"gmapElement\"></div>");
-;// CONCATENATED MODULE: ./src/templates/bootstrap/map/index.js
+;// CONCATENATED MODULE: ./src/templates/bootstrap/googleMap/form.ejs
+/* harmony default export */ const googleMap_form = ("<div id=\"{{ctx.mapId}}\" style=\"min-height: 300px; height: calc(100vh - 600px);\" ref=\"gmapElement\"></div>");
+;// CONCATENATED MODULE: ./src/templates/bootstrap/googleMap/index.js
 
-const map = {
-  form: map_form
+const googleMap = {
+  form: googleMap_form
+};
+;// CONCATENATED MODULE: ./src/templates/bootstrap/leafMap/form.ejs
+/* harmony default export */ const leafMap_form = ("<div id=\"{{ctx.mapId}}\" style=\"min-height: 300px; height: calc(100vh - 600px);\" ref=\"leafElement\"></div>");
+;// CONCATENATED MODULE: ./src/templates/bootstrap/leafMap/index.js
+
+const leafMap = {
+  form: leafMap_form
 };
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/index.js
 
  // export * from "./plsPlusAddressWithMap";
+
 
 
 ;// CONCATENATED MODULE: ./src/templates/index.js
