@@ -17739,6 +17739,8 @@ __webpack_require__.r(__webpack_exports__);
 var components_namespaceObject = {};
 __webpack_require__.r(components_namespaceObject);
 __webpack_require__.d(components_namespaceObject, {
+  "GoogleLocation": () => (GoogleLocation),
+  "OpenStreetMapLocation": () => (OpenStreetMapLocation),
   "PdfSubmitButton": () => (PdfSubmitButton),
   "PlsPlusAddress": () => (PlsPlusAddress)
 });
@@ -17748,6 +17750,8 @@ var bootstrap_namespaceObject = {};
 __webpack_require__.r(bootstrap_namespaceObject);
 __webpack_require__.d(bootstrap_namespaceObject, {
   "boilerplateButton": () => (boilerplateButton),
+  "googleMap": () => (googleMap),
+  "leafletMap": () => (leafletMap),
   "plsPlusAddress": () => (plsPlusAddress)
 });
 
@@ -18185,6 +18189,8 @@ const PlsPlusAddress_form_baseEditForm = Formio.Components.components.base.editF
  * need to extend from `container` to `fieldset` due to Formio app upgrade from 7.1.2 to 7.3.0
  * otherwise component data will get erase when submitted to the server
  *
+ *
+ * This has templates stored under templates/plsPlusAddress
  */
 
 
@@ -18816,13 +18822,466 @@ class PlsPlusAddress extends FieldsetComponent {
 PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/PlsPlusAddress/index.js
 
+;// CONCATENATED MODULE: ./src/components/googleLocation/editForm/Location.edit.map.js
+/* harmony default export */ const Location_edit_map = ([{
+  type: "textfield",
+  input: true,
+  key: "map.key",
+  label: "API Key",
+  tooltip: "The API key for Google Maps. See <a href='https://developers.google.com/maps/documentation/geocoding/get-api-key' target='_blank'>Get an API Key</a> for more information.",
+  placeholder: "xxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxx",
+  weight: 0
+}, {
+  type: "textfield",
+  input: true,
+  label: "Region Bias",
+  key: "map.region",
+  tooltip: "The region bias to use for this search. See <a href='https://developers.google.com/maps/documentation/geocoding/intro#RegionCodes' target='_blank'>Region Biasing</a> for more information.",
+  placeholder: "Dallas",
+  weight: 10
+}, {
+  type: "textfield",
+  input: true,
+  label: "Google Map ID",
+  key: "map.gmapId",
+  tooltip: "This is the Google Maps ID you wish to use when showing the location map.",
+  weight: 20
+}]);
+;// CONCATENATED MODULE: ./src/components/googleLocation/GoogleLocation.form.js
+
+const GoogleLocation_form_baseEditForm = Formio.Components.components.base.editForm;
+/* harmony default export */ function GoogleLocation_form() {
+  for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+    extend[_key] = arguments[_key];
+  }
+
+  return GoogleLocation_form_baseEditForm([{
+    label: "Map",
+    key: "map",
+    weight: 1,
+    components: Location_edit_map
+  }], ...extend);
+}
+;// CONCATENATED MODULE: ./src/components/googleLocation/GoogleLocation.js
+/* global google */
+
+const TextFieldComponent = Formio.Components.components.textfield;
+class GoogleLocation extends TextFieldComponent {
+  static schema() {
+    for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+      extend[_key] = arguments[_key];
+    }
+
+    return TextFieldComponent.schema({
+      type: "googlelocation",
+      label: "Google Location",
+      key: "location",
+      map: {
+        key: "",
+        region: "",
+        gmapId: "",
+        autocompleteOptions: {}
+      }
+    }, ...extend);
+  }
+
+  static get builderInfo() {
+    return {
+      title: "Google Location",
+      group: "custom",
+      icon: "map",
+      weight: 36,
+      schema: GoogleLocation.schema()
+    };
+  }
+
+  init() {
+    super.init();
+    let src = "https://maps.googleapis.com/maps/api/js?v=3&libraries=places&callback=googleMapsCallback";
+
+    if (this.component.map && this.component.map.key) {
+      src += "&key=".concat(this.component.map.key);
+    }
+
+    if (this.component.map && this.component.map.region) {
+      src += "&region=".concat(this.component.map.region);
+    }
+
+    Formio.requireLibrary("googleMaps", "google.maps.places", src);
+  }
+
+  get defaultSchema() {
+    return GoogleLocation.schema();
+  }
+
+  get emptyValue() {
+    return "";
+  }
+
+  get inputInfo() {
+    const info = super.inputInfo;
+    info.attr.class += " Gmap-search";
+    return info;
+  }
+
+  renderElement(value, index) {
+    return super.renderElement(value, index) + this.renderTemplate("googleMap", {
+      mapId: this.component.map.gmapId
+    });
+  }
+
+  attach(element) {
+    const ret = super.attach(element);
+    this.loadRefs(element, {
+      gmapElement: "multiple"
+    });
+    return ret;
+  }
+
+  attachElement(element, index) {
+    super.attachElement(element, index);
+    Formio.libraryReady("googleMaps").then(() => {
+      const defaultLatlng = new google.maps.LatLng(-27.470125, 153.021072); // brisbane
+      // const defaultLatlng = new google.maps.LatLng(45.5041482, -73.5574125);
+
+      const options = {
+        zoom: 10,
+        center: defaultLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        styles: [{
+          featureType: "poi",
+          stylers: [{
+            visibility: "off"
+          }]
+        }, {
+          featureType: "transit",
+          stylers: [{
+            visibility: "off"
+          }]
+        }]
+      };
+
+      if (!this.refs.gmapElement[index]) {
+        return;
+      }
+
+      element.map = new google.maps.Map(this.refs.gmapElement[index], options);
+      this.addMarker(defaultLatlng, "Default Marker", element);
+      let autocompleteOptions = {};
+
+      if (this.component.map) {
+        autocompleteOptions = this.component.map.autocompleteOptions || {};
+      }
+
+      const autocomplete = new google.maps.places.Autocomplete(element, autocompleteOptions);
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+
+        if (!place.geometry) {
+          console.log("Autocomplete's returned place contains no geometry");
+          return;
+        } // If the place has a geometry, then present it on a map.
+
+
+        if (place.geometry.viewport) {
+          element.map.fitBounds(place.geometry.viewport);
+        } else {
+          element.map.setCenter(place.geometry.location);
+          element.map.setZoom(17); // Why 17? Because it looks good.
+        }
+
+        element.marker.setIcon(
+        /** @type {google.maps.Icon} */
+        {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(35, 35)
+        });
+        element.marker.setPosition(place.geometry.location);
+        this.setValue(place.name);
+      });
+    });
+  }
+
+  addMarker(latlngIn, title, element) {
+    let latlng = latlngIn;
+    element.marker = new google.maps.Marker({
+      position: latlng,
+      map: element.map,
+      title,
+      draggable: true
+    });
+    element.marker.addListener("dragend", event => {
+      const geocoder = new google.maps.Geocoder();
+      latlng = {
+        lat: parseFloat(event.latLng.lat()),
+        lng: parseFloat(event.latLng.lng())
+      };
+      geocoder.geocode({
+        location: latlng
+      }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          if (results[1]) {
+            this.setValue(results[0].formatted_address);
+          } else {
+            console.log("No results found");
+          }
+        } else {
+          console.log("Geocoder failed due to: ".concat(status));
+        }
+      });
+    });
+  }
+
+}
+GoogleLocation.editForm = GoogleLocation_form; // Register the component to the Formio.Components registry.
+// This is not required as we dynamicly load them based on lower
+// Formio.Components.addComponent("location", GoogleLocation);
+;// CONCATENATED MODULE: ./src/components/googleLocation/index.js
+
+;// CONCATENATED MODULE: ./src/components/openStreetMapLocation/editForm/OpenStreetMapLocation.edit.map.js
+/* harmony default export */ const OpenStreetMapLocation_edit_map = ([{
+  type: "textfield",
+  input: true,
+  label: "Initial Lat Location",
+  key: "map.lat",
+  tooltip: "",
+  placeholder: "-27.470125",
+  weight: 10
+}, {
+  type: "textfield",
+  input: true,
+  label: "Initial Long Location",
+  key: "map.lon",
+  tooltip: "",
+  placeholder: "153.021072",
+  weight: 15
+}, {
+  type: "textfield",
+  input: true,
+  label: "Map ID",
+  key: "map.mapId",
+  tooltip: "This is the  Maps ID you wish to use when showing the location map.",
+  weight: 20
+}]);
+;// CONCATENATED MODULE: ./src/components/openStreetMapLocation/OpenStreetMapLocation.form.js
+
+const OpenStreetMapLocation_form_baseEditForm = Formio.Components.components.base.editForm;
+/* harmony default export */ function OpenStreetMapLocation_form() {
+  for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+    extend[_key] = arguments[_key];
+  }
+
+  return OpenStreetMapLocation_form_baseEditForm([{
+    label: "Map",
+    key: "map",
+    weight: 1,
+    components: OpenStreetMapLocation_edit_map
+  }], ...extend);
+}
+;// CONCATENATED MODULE: ./src/components/openStreetMapLocation/OpenStreetMapLocation.js
+/* global L */
+
+const OpenStreetMapLocation_TextFieldComponent = Formio.Components.components.textfield;
+class OpenStreetMapLocation extends OpenStreetMapLocation_TextFieldComponent {
+  static schema() {
+    for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+      extend[_key] = arguments[_key];
+    }
+
+    return OpenStreetMapLocation_TextFieldComponent.schema({
+      type: "openstreetmaplocation",
+      label: "Open Street Maps Location",
+      key: "location",
+      map: {
+        key: "",
+        lat: "",
+        lon: "",
+        gmapId: "",
+        autocompleteOptions: {}
+      }
+    }, ...extend);
+  }
+
+  static get builderInfo() {
+    return {
+      title: "Open Street Maps Location",
+      group: "custom",
+      icon: "map",
+      weight: 36,
+      schema: OpenStreetMapLocation.schema()
+    };
+  }
+
+  init() {
+    super.init();
+    const leafletLibrary = [{
+      type: "script",
+      src: "https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    }, {
+      type: "styles",
+      src: "https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    }];
+    Formio.requireLibrary("L", "L", leafletLibrary, true);
+  }
+
+  get defaultSchema() {
+    return OpenStreetMapLocation.schema();
+  }
+
+  get emptyValue() {
+    return "";
+  }
+
+  get inputInfo() {
+    const info = super.inputInfo;
+    info.attr.class += " leaflet-search";
+    return info;
+  }
+
+  renderElement(value, index) {
+    return super.renderElement(value, index) + this.renderTemplate("leafletMap", {
+      mapId: this.component.map.mapId
+    });
+  }
+
+  attach(element) {
+    const ret = super.attach(element);
+    this.loadRefs(element, {
+      leafletElement: "multiple"
+    });
+    return ret;
+  }
+
+  attachElement(element, index) {
+    super.attachElement(element, index);
+    Formio.libraryReady("L").then(() => {
+      if (!this.refs.leafletElement[index]) {
+        return;
+      }
+
+      const defaultLatlng = [this.component.map.lat, this.component.map.lon]; // brisbane
+
+      console.log(defaultLatlng); // console.log(this.refs.leafletElement[index]);
+
+      const mapElement = this.refs.leafletElement[index];
+      const map = L.map(mapElement).setView(defaultLatlng, 18);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+      }).addTo(map); // show the scale bar on the lower left corner
+
+      L.control.scale({
+        imperial: false,
+        metric: true
+      }).addTo(map);
+      element.map = map;
+      this.addMarker(defaultLatlng, "pointer", element, this); // let autocompleteOptions = {};
+      // if (this.component.map) {
+      //   autocompleteOptions = this.component.map.autocompleteOptions || {};
+      // }
+      // const autocomplete = new google.maps.places.Autocomplete(
+      //   element,
+      //   autocompleteOptions
+      // );
+      // autocomplete.addListener("place_changed", () => {
+      //   const place = autocomplete.getPlace();
+      //   if (!place.geometry) {
+      //     console.log("Autocomplete's returned place contains no geometry");
+      //     return;
+      //   }
+      //
+      //   // If the place has a geometry, then present it on a map.
+      //   if (place.geometry.viewport) {
+      //     element.map.fitBounds(place.geometry.viewport);
+      //   } else {
+      //     element.map.setCenter(place.geometry.location);
+      //     element.map.setZoom(17); // Why 17? Because it looks good.
+      //   }
+      //   element.marker.setIcon(
+      //     /** @type {google.maps.Icon} */ ({
+      //       url: place.icon,
+      //       size: new google.maps.Size(71, 71),
+      //       origin: new google.maps.Point(0, 0),
+      //       anchor: new google.maps.Point(17, 34),
+      //       scaledSize: new google.maps.Size(35, 35),
+      //     })
+      //   );
+      //   element.marker.setPosition(place.geometry.location);
+      //   this.setValue(place.name);
+      // });
+    });
+  }
+
+  addMarker(latlngIn, title, element, func) {
+    const marker = L.marker(latlngIn, {
+      draggable: true,
+      autoPan: true
+    });
+    marker.addTo(element.map); // element.marker = marker;
+    // this.addMarker(defaultLatlng, "Default Marker", element);
+
+    marker.on("moveend", function (event) {
+      // marker.addListener("moveend", (event) => {
+      console.log(event); // const markerInternal = e.target;
+
+      const position = marker.getLatLng(); // geocode for plsplus
+      // const geocoder = //new google.maps.Geocoder();
+      // latlng = {
+      //   lat: parseFloat(event.latLng.lat()),
+      //   lng: parseFloat(event.latLng.lng()),
+      // };
+      // console.log(title + position.lat+ "," +position.lng, element)
+      // marker.bindPopup(title + position.lat+ "," +position.lng);
+
+      func.setValue("".concat(position.lat, ",").concat(position.lng));
+      element.map.panTo(new L.LatLng(position.lat, position.lng));
+    }); // let latlng = latlngIn;
+    // element.marker = new google.maps.Marker({
+    //   position: latlng,
+    //   map: element.map,
+    //   title,
+    //   draggable: true,
+    // });
+    // element.marker.addListener("dragend", (event) => {
+    //   const geocoder = new google.maps.Geocoder();
+    //   latlng = {
+    //     lat: parseFloat(event.latLng.lat()),
+    //     lng: parseFloat(event.latLng.lng()),
+    //   };
+    //   geocoder.geocode({ location: latlng }, (results, status) => {
+    //     if (status === google.maps.GeocoderStatus.OK) {
+    //       if (results[1]) {
+    //         this.setValue(results[0].formatted_address);
+    //       } else {
+    //         console.log("No results found");
+    //       }
+    //     } else {
+    //       console.log(`Geocoder failed due to: ${status}`);
+    //     }
+    //   });
+    // });
+  }
+
+}
+OpenStreetMapLocation.editForm = OpenStreetMapLocation_form; // Register the component to the Formio.Components registry.
+// This is not required as we dynamicly load them based on lower
+// Formio.Components.addComponent("location", GoogleLocation);
+;// CONCATENATED MODULE: ./src/components/openStreetMapLocation/index.js
+
 ;// CONCATENATED MODULE: ./src/components/index.js
 /*
  * this file is used for prod environment for bundling
  *
  */
 
- // export * from "./SSOButton";
+ // export * from "./PlsPlusAddressWithMap";
+// export * from "./SSOButton";
+
+
+
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/boilerplateButton/form.ejs
 /* harmony default export */ const boilerplateButton_form = ("<!--\n  boilerplate from https://github.com/formio/formio.js/blob/master/src/templates/bootstrap/button/form.ejs\n-->\n<div class=\"mb-2\">\n  {{ctx.component.customDescription}}\n</div>\n<{{ctx.input.type}}\n  ref=\"button\"\n  {% for (var attr in ctx.input.attr) { %}\n  {{attr}}=\"{{ctx.input.attr[attr]}}\"\n  {% } %}\n  {% if (ctx.component.description) { %}\n    aria-describedby=\"d-{{ctx.instance.id}}-{{ctx.component.key}}\"\n  {% } %}\n>\n{% if (ctx.component.leftIcon) { %}<span class=\"{{ctx.component.leftIcon}}\"></span>&nbsp;{% } %}\n{{ctx.input.content}}\n{% if (ctx.component.tooltip) { %}\n  <i ref=\"tooltip\" class=\"{{ctx.iconClass('question-sign')}} text-muted\" data-tooltip=\"{{ctx.component.tooltip}}\"></i>\n{% } %}\n{% if (ctx.component.rightIcon) { %}&nbsp;<span class=\"{{ctx.component.rightIcon}}\"></span>{% } %}\n</{{ctx.input.type}}>\n<div ref=\"buttonMessageContainer\">\n  <span class=\"help-block\" ref=\"buttonMessage\"></span>\n</div>\n");
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/boilerplateButton/html.ejs
@@ -18855,7 +19314,24 @@ const plsPlusAddress = {
   form: plsPlusAddress_form,
   html: plsPlusAddress_html
 };
+;// CONCATENATED MODULE: ./src/templates/bootstrap/googleMap/form.ejs
+/* harmony default export */ const googleMap_form = ("<div id=\"{{ctx.mapId}}\" style=\"min-height: 300px; height: calc(100vh - 600px);\" ref=\"gmapElement\"></div>");
+;// CONCATENATED MODULE: ./src/templates/bootstrap/googleMap/index.js
+
+const googleMap = {
+  form: googleMap_form
+};
+;// CONCATENATED MODULE: ./src/templates/bootstrap/leafletMap/form.ejs
+/* harmony default export */ const leafletMap_form = ("<div id=\"{{ctx.mapId}}\" style=\"min-height: 300px; height: calc(100vh - 600px);\" ref=\"leafletElement\"></div>");
+;// CONCATENATED MODULE: ./src/templates/bootstrap/leafletMap/index.js
+
+const leafletMap = {
+  form: leafletMap_form
+};
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/index.js
+
+ // export * from "./plsPlusAddressWithMap";
+
 
 
 ;// CONCATENATED MODULE: ./src/templates/index.js
@@ -19045,6 +19521,7 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
 
 Formio.use({
   components: getComponents(components_namespaceObject),
+  // load components by lower casing import name
   templates: templates,
   providers: providers,
   options: (build_options_default())
