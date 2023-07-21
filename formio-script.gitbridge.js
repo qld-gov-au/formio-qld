@@ -60,7 +60,6 @@ const createScripts = (scripts, i, mainResolve) => {
     mainResolve();
     return;
   }
-
   const {
     type,
     async,
@@ -68,7 +67,6 @@ const createScripts = (scripts, i, mainResolve) => {
     href,
     rel
   } = scripts[i];
-
   if (!document.querySelector("".concat(type, "[src='").concat(src, "']")) && !document.querySelector("".concat(type, "[href='").concat(href, "']"))) {
     const promise = new Promise(resolve => {
       const elem = document.createElement(type);
@@ -77,7 +75,6 @@ const createScripts = (scripts, i, mainResolve) => {
       if (href !== undefined) elem.setAttribute("href", href);
       if (rel !== undefined) elem.setAttribute("rel", rel);
       document.body.appendChild(elem);
-
       elem.onload = () => {
         console.info("FormioScript loaded:", src || href);
         resolve();
@@ -107,7 +104,8 @@ const getDefaultScripts = _ref => {
     type: "script",
     src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio-qld.js"),
     async: false
-  }, // note: formio-loader should always load last
+  },
+  // note: formio-loader should always load last
   {
     type: "script",
     src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio-loader.js"),
@@ -154,7 +152,8 @@ const scripts = [{
   type: "script",
   src: "/__data/assets/git_bridge/0025/".concat(version, "/formio-qld.js"),
   async: false
-}, // note: formio-loader should always load last
+},
+// note: formio-loader should always load last
 {
   type: "script",
   src: "/__data/assets/git_bridge/0025/".concat(version, "/formio-loader.js"),
