@@ -17739,6 +17739,7 @@ __webpack_require__.r(__webpack_exports__);
 var components_namespaceObject = {};
 __webpack_require__.r(components_namespaceObject);
 __webpack_require__.d(components_namespaceObject, {
+  "GoogleLocation": () => (GoogleLocation),
   "PdfSubmitButton": () => (PdfSubmitButton),
   "PlsPlusAddress": () => (PlsPlusAddress)
 });
@@ -17748,6 +17749,8 @@ var bootstrap_namespaceObject = {};
 __webpack_require__.r(bootstrap_namespaceObject);
 __webpack_require__.d(bootstrap_namespaceObject, {
   "boilerplateButton": () => (boilerplateButton),
+  "googleMap": () => (googleMap),
+  "leafletMap": () => (leafletMap),
   "plsPlusAddress": () => (plsPlusAddress)
 });
 
@@ -17769,6 +17772,7 @@ const getComponents = components => {
  * https://github.com/formio/formio.js/blob/master/src/components/button/editForm/Button.edit.display.js
  *
  */
+
 /* harmony default export */ const PdfSubmitButton_edit_display = ([{
   type: "content",
   html: "<h2>This component is still in development and not a stable version.</h2><h2>Please follow <a href=\"#\" target=\"_blank\">this guide</a> to setup the form action before using this component.</h2>",
@@ -17956,12 +17960,12 @@ const getComponents = components => {
  *
  */
 
+
 const baseEditForm = Formio.Components.components.base.editForm;
 /* harmony default export */ const PdfSubmitButton_form = (function () {
   for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
     extend[_key] = arguments[_key];
   }
-
   return baseEditForm([{
     key: "display",
     components: PdfSubmitButton_edit_display
@@ -17983,13 +17987,13 @@ const baseEditForm = Formio.Components.components.base.editForm;
  *
  */
 
+
 const Button = Formio.Components.components.button;
 class PdfSubmitButton extends Button {
   static schema() {
     for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
       extend[_key] = arguments[_key];
     }
-
     return Button.schema({
       type: "pdfsubmitbutton",
       label: "Submit",
@@ -18007,24 +18011,19 @@ class PdfSubmitButton extends Button {
       ...extend
     });
   }
-
   init() {
-    var _this$root, _this$root$options;
-
+    var _this$root;
     // hide the default submit button if it is a wizard
-    if ((_this$root = this.root) !== null && _this$root !== void 0 && (_this$root$options = _this$root.options) !== null && _this$root$options !== void 0 && _this$root$options.buttonSettings) this.root.options.buttonSettings.showSubmit = false;
+    if ((_this$root = this.root) !== null && _this$root !== void 0 && (_this$root = _this$root.options) !== null && _this$root !== void 0 && _this$root.buttonSettings) this.root.options.buttonSettings.showSubmit = false;
     super.init();
   }
-
   attachButton() {
     super.attachButton();
-
     if (this.component.action === "submit") {
       this.on(this.component.debugMode ? "submit" : "submitDone", e => {
-        var _e$metadata, _e$metadata$pdfUrl;
-
+        var _e$metadata;
         // get the pdf DownloadUrl from submission response, the action name setup in the form needed to be `pdfUrl`
-        const pdfUrl = this.component.debugMode ? this.component.debugPdfUrl : e === null || e === void 0 ? void 0 : (_e$metadata = e.metadata) === null || _e$metadata === void 0 ? void 0 : (_e$metadata$pdfUrl = _e$metadata.pdfUrl) === null || _e$metadata$pdfUrl === void 0 ? void 0 : _e$metadata$pdfUrl.DownloadUrl;
+        const pdfUrl = this.component.debugMode ? this.component.debugPdfUrl : e === null || e === void 0 || (_e$metadata = e.metadata) === null || _e$metadata === void 0 || (_e$metadata = _e$metadata.pdfUrl) === null || _e$metadata === void 0 ? void 0 : _e$metadata.DownloadUrl;
         const {
           downloadSuccessMessage,
           downloadFailedMessage,
@@ -18033,25 +18032,26 @@ class PdfSubmitButton extends Button {
           downloadButtonTarget,
           downloadSuccessMessageClass,
           downloadFailedMessageClass
-        } = this.component; // setup default settings for download button
+        } = this.component;
 
+        // setup default settings for download button
         const className = downloadButtonClass !== undefined ? downloadButtonClass : "btn btn-primary";
         const target = downloadButtonTarget !== undefined ? downloadButtonTarget : "_blank";
         const label = downloadButtonLabel !== undefined ? downloadButtonLabel : "Download";
         const successMessageClass = downloadSuccessMessageClass || "";
-        const failedMessageClass = downloadFailedMessageClass || ""; // replace form div container with downloadSuccessMessage
+        const failedMessageClass = downloadFailedMessageClass || "";
+
+        // replace form div container with downloadSuccessMessage
 
         if (pdfUrl) {
           this.root.element.innerHTML = "\n              <div class=\"".concat(successMessageClass, "\">\n                ").concat(downloadSuccessMessage ? "<div class=\"mb-3 download-success-message-container\">".concat(downloadSuccessMessage, "</div>") : "", "\n                <div class=\"download-button-container\">\n                  <a href=\"").concat(pdfUrl, "\" class=\"").concat(className, "\" target=\"").concat(target, "\" />\n                    ").concat(label, "\n                  </a>\n                </div>\n              </div>\n            ");
         } else {
           this.root.element.innerHTML = "\n              <div class=\"".concat(failedMessageClass, "\">\n                <div class=\"download-failed-message-container\">\n                  ").concat(downloadFailedMessage, "\n                </div>\n              </div>\n            ");
         }
-
         this.root.element.scrollIntoView();
       }, true);
     }
   }
-
   static get builderInfo() {
     return {
       title: "PdfSubmitButton",
@@ -18059,11 +18059,11 @@ class PdfSubmitButton extends Button {
       icon: "fa-solid fa-file",
       documentation: "/userguide/#button",
       weight: 2,
-      schema: { ...PdfSubmitButton.schema()
+      schema: {
+        ...PdfSubmitButton.schema()
       }
     };
   }
-
 }
 PdfSubmitButton.editForm = PdfSubmitButton_form;
 ;// CONCATENATED MODULE: ./src/components/PdfSubmitButton/index.js
@@ -18088,6 +18088,7 @@ var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
  * https://github.com/formio/formio.js/blob/master/src/components/address/editForm/Address.edit.display.js
  *
  */
+
 /* harmony default export */ const PlsPlusAddress_edit_display = ([{
   weight: 30,
   type: "textfield",
@@ -18159,12 +18160,12 @@ var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
 
 
 
+
 const PlsPlusAddress_form_baseEditForm = Formio.Components.components.base.editForm;
 /* harmony default export */ const PlsPlusAddress_form = (function () {
   for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
     extend[_key] = arguments[_key];
   }
-
   return PlsPlusAddress_form_baseEditForm([{
     key: "data",
     components: PlsPlusAddress_edit_data
@@ -18185,7 +18186,10 @@ const PlsPlusAddress_form_baseEditForm = Formio.Components.components.base.editF
  * need to extend from `container` to `fieldset` due to Formio app upgrade from 7.1.2 to 7.3.0
  * otherwise component data will get erase when submitted to the server
  *
+ *
+ * This has templates stored under templates/plsPlusAddress
  */
+
 
 
 
@@ -18207,12 +18211,10 @@ class PlsPlusAddress extends FieldsetComponent {
     super(...arguments);
     this.noField = false;
   }
-
   static schema() {
     for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
       extend[_key] = arguments[_key];
     }
-
     return FieldsetComponent.schema({
       type: "plsplusaddress",
       label: "PlsPlus Address",
@@ -18308,7 +18310,6 @@ class PlsPlusAddress extends FieldsetComponent {
       }]
     }, ...extend);
   }
-
   static get builderInfo() {
     return {
       title: "PlsPlusAddress",
@@ -18316,33 +18317,29 @@ class PlsPlusAddress extends FieldsetComponent {
       icon: "home",
       documentation: "/userguide/#address",
       weight: 2,
-      schema: { ...PlsPlusAddress.schema()
+      schema: {
+        ...PlsPlusAddress.schema()
       }
     };
   }
-
   getComponents() {
     return this.components || [];
   }
-
   mergeSchema() {
     let component = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     let {
       defaultSchema
     } = this;
-
     if (component.components) {
       defaultSchema = lodash_default().omit(defaultSchema, "components");
     }
-
     return lodash_default().defaultsDeep(component, defaultSchema);
   }
-
   get defaultSchema() {
-    return { ...PlsPlusAddress.schema()
+    return {
+      ...PlsPlusAddress.schema()
     };
   }
-
   get composedAddress() {
     const {
       address1,
@@ -18354,56 +18351,45 @@ class PlsPlusAddress extends FieldsetComponent {
     } = this.address;
     return [address1, address2, address3, city, state, postcode].join(" ").replace(/ +/g, " ").trim();
   }
-
   onChange(flags, fromRoot) {
     if (this.autocompleteMode) {
       if (this.address) this.setAddressProp("selectedAddress", this.address.autocompleteAddress);
     } else if (this.address) this.setAddressProp("selectedAddress", this.composedAddress);
-
     return super.onChange(flags, fromRoot);
   }
-
   init() {
     this.components = this.components || [];
     Field.prototype.init.call(this);
-
     if (!this.builderMode) {
       const {
         provider = "plsPlus",
         providerOptions
       } = this.component;
-
       if (provider) {
         this.provider = this.initializeProvider(provider, providerOptions);
       }
     }
-
     return super.init();
   }
-
   initializeProvider(provider) {
     let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const Provider = Formio.Providers.getProvider("address", provider);
-    return new Provider({ ...options
+    return new Provider({
+      ...options
     });
   }
-
   get manualModeEnabled() {
     return Boolean(this.component.enableManualMode);
   }
-
   get mode() {
     if (!this.manualModeEnabled) {
       return PlsPlusAddressMode.Autocomplete;
     }
-
     return this.address.mode || PlsPlusAddressMode.Autocomplete;
   }
-
   set mode(value) {
     this.setAddressProp("mode", value);
   }
-
   get emptyValue() {
     return this.manualModeEnabled ? {
       address: {
@@ -18419,86 +18405,68 @@ class PlsPlusAddress extends FieldsetComponent {
       }
     } : {};
   }
-
   get autocompleteMode() {
     return this.mode === PlsPlusAddressMode.Autocomplete;
   }
-
   get manualMode() {
     return this.mode === PlsPlusAddressMode.Manual;
   }
-
   get isMultiple() {
     return Boolean(this.component.multiple);
   }
-
   get container() {
     return this.getComponents().find(comp => {
       var _comp$originalCompone;
-
       return (_comp$originalCompone = comp.originalComponent.tags) === null || _comp$originalCompone === void 0 ? void 0 : _comp$originalCompone.includes("container");
     });
   }
-
   get address() {
     var _this$container;
-
     const dataValue = (_this$container = this.container) === null || _this$container === void 0 ? void 0 : _this$container.dataValue;
     const addressData = addressKeys.map(k => {
       if (this.container) {
         var _this$container$getCo;
-
         const componentKey = (_this$container$getCo = this.container.getComponents().find(comp => {
           var _comp$originalCompone2;
-
           return (_comp$originalCompone2 = comp.originalComponent.tags) === null || _comp$originalCompone2 === void 0 ? void 0 : _comp$originalCompone2.includes(k);
         })) === null || _this$container$getCo === void 0 ? void 0 : _this$container$getCo.component.key;
         return {
           [k]: dataValue[componentKey]
         };
       }
-
       return {};
     });
     return Object.assign({}, ...addressData);
   }
-
   set address(value) {
     this.dataValue = value;
     let changed = false;
-
     if (this.container) {
       addressKeys.forEach(k => {
         var _this$container$getCo2;
-
         const componentKey = (_this$container$getCo2 = this.container.getComponents().find(comp => {
           var _comp$originalCompone3;
-
           return (_comp$originalCompone3 = comp.originalComponent.tags) === null || _comp$originalCompone3 === void 0 ? void 0 : _comp$originalCompone3.includes(k);
         })) === null || _this$container$getCo2 === void 0 ? void 0 : _this$container$getCo2.component.key;
-
         if (this.container.dataValue[componentKey] !== value[k]) {
           this.container.dataValue[componentKey] = value[k];
           changed = true;
         }
       });
     }
-
     if (changed) this.onChange({
       modified: true
     });
   }
-
   setAddressProp(prop, value) {
     if (this.address[prop] === value) return;
-    this.address = { ...this.address,
+    this.address = {
+      ...this.address,
       [prop]: value
     };
   }
-
   restoreComponentsContext() {
     var _this$container2;
-
     (_this$container2 = this.container) === null || _this$container2 === void 0 ? void 0 : _this$container2.getComponents().forEach(component => {
       component.data = this.container.dataValue;
       component.setValue(component.dataValue, {
@@ -18506,48 +18474,37 @@ class PlsPlusAddress extends FieldsetComponent {
       });
     });
   }
-
   setValue(value) {
     let flags = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     // const changed = Field.prototype.setValue.call(this, value, flags);
     this.restoreComponentsContext();
-
     if (!lodash_default().isEmpty(value) && flags.fromSubmission) {
       setTimeout(() => {
         this.redraw();
       });
     }
-
     return super.setValue(value, flags);
   }
-
   static get modeSwitcherRef() {
     return "modeSwitcher";
   }
-
   static get removeValueIconRef() {
     return "removeValueIcon";
   }
-
   static get searchInputRef() {
     return "searchInput";
   }
-
   get modeSwitcher() {
     return this.refs ? this.refs[PlsPlusAddress.modeSwitcherRef] || null : null;
   }
-
   get removeValueIcon() {
     return this.refs ? this.refs[PlsPlusAddress.removeValueIconRef] || null : null;
   }
-
   get searchInput() {
     return this.refs ? this.refs[PlsPlusAddress.searchInputRef] || null : null;
   }
-
   get searchInputAttributes() {
-    var _this$component$provi, _this$component$provi2;
-
+    var _this$component$provi;
     const attr = {
       name: this.options.name,
       type: "text",
@@ -18555,57 +18512,45 @@ class PlsPlusAddress extends FieldsetComponent {
       lang: this.options.language,
       tabindex: this.component.tabindex || 0
     };
-
     if (this.component.placeholder) {
       attr.placeholder = this.t(this.component.placeholder);
     }
-
-    if (this.disabled || this.manualMode || !((_this$component$provi = this.component.providerOptions) !== null && _this$component$provi !== void 0 && (_this$component$provi2 = _this$component$provi.params) !== null && _this$component$provi2 !== void 0 && _this$component$provi2.apiKey)) {
+    if (this.disabled || this.manualMode || !((_this$component$provi = this.component.providerOptions) !== null && _this$component$provi !== void 0 && (_this$component$provi = _this$component$provi.params) !== null && _this$component$provi !== void 0 && _this$component$provi.apiKey)) {
       attr.disabled = "disabled";
     }
-
     lodash_default().defaults(attr, this.component.attributes);
-
     return attr;
   }
-
   get templateName() {
     return "plsPlusAddress";
   }
-
   get hasChildren() {
     return this.builderMode || this.manualModeEnabled;
   }
-
   renderElement(value) {
-    var _this$container3, _this$component$provi3, _this$component$provi4;
-
+    var _this$container3, _this$component$provi2;
     (_this$container3 = this.container) === null || _this$container3 === void 0 ? void 0 : _this$container3.getComponents().forEach(component => {
       if (!this.builderMode && this.attached) {
         component.disabled = component.originalComponent.disabled || !this.manualMode;
         component.component.validate = !this.manualMode ? {} : component.originalComponent.validate;
       }
-
       component.onChange = (flags, fromRoot) => {
         if (flags.modified && component.originalComponent.tags.length) {
           this.setAddressProp(component.originalComponent.tags[0], component.dataValue);
         }
-
         return this.onChange(flags, fromRoot);
       };
     });
-
     if (!this.builderMode && this.attached) {
-      var _this$originalCompone, _this$originalCompone2;
-
-      this.component.validate = { ...(((_this$originalCompone = this.originalComponent) === null || _this$originalCompone === void 0 ? void 0 : (_this$originalCompone2 = _this$originalCompone.validate) === null || _this$originalCompone2 === void 0 ? void 0 : _this$originalCompone2.required) && {
+      var _this$originalCompone;
+      this.component.validate = {
+        ...(((_this$originalCompone = this.originalComponent) === null || _this$originalCompone === void 0 || (_this$originalCompone = _this$originalCompone.validate) === null || _this$originalCompone === void 0 ? void 0 : _this$originalCompone.required) && {
           custom: "valid = !!instance.address.selectedAddress;",
           customMessage: "".concat(this.component.label, " is required."),
           required: !this.manualMode
         })
       };
     }
-
     return this.renderTemplate(this.templateName, {
       children: this.hasChildren ? this.renderComponents() : "",
       nestedKey: this.nestedKey,
@@ -18620,27 +18565,21 @@ class PlsPlusAddress extends FieldsetComponent {
         autocomplete: this.autocompleteMode,
         manual: this.manualMode
       },
-      hasApiKey: !!((_this$component$provi3 = this.component.providerOptions) !== null && _this$component$provi3 !== void 0 && (_this$component$provi4 = _this$component$provi3.params) !== null && _this$component$provi4 !== void 0 && _this$component$provi4.apiKey)
+      hasApiKey: !!((_this$component$provi2 = this.component.providerOptions) !== null && _this$component$provi2 !== void 0 && (_this$component$provi2 = _this$component$provi2.params) !== null && _this$component$provi2 !== void 0 && _this$component$provi2.apiKey)
     });
   }
-
   render() {
     return super.render(this.renderElement());
   }
-
   onSelectAddress(address, element, index) {
     this.setAddressProp("autocompleteAddress", address);
-
     if (element) {
       element.value = this.getDisplayValue(this.address);
     }
-
     this.updateRemoveIcon(index);
   }
-
   attach(element) {
     const result = (this.builderMode || this.manualMode ? super.attach : Field.prototype.attach).call(this, element);
-
     if (!this.builderMode) {
       if (!this.provider && this.component.provider) {
         const {
@@ -18650,7 +18589,6 @@ class PlsPlusAddress extends FieldsetComponent {
         this.provider = this.initializeProvider(provider, providerOptions);
       }
     }
-
     this.loadRefs(element, {
       [PlsPlusAddress.modeSwitcherRef]: "single",
       [PlsPlusAddress.removeValueIconRef]: "multiple",
@@ -18676,7 +18614,8 @@ class PlsPlusAddress extends FieldsetComponent {
           onSelect: address => {
             this.onSelectAddress(address, elem, index);
             this.provider.parseAddress(address).then(r => {
-              this.address = { ...this.address,
+              this.address = {
+                ...this.address,
                 ...this.provider.breakAddress(r),
                 mode: this.mode
               };
@@ -18693,22 +18632,18 @@ class PlsPlusAddress extends FieldsetComponent {
           if (!elem) {
             return;
           }
-
           if (elem.value) {
             elem.value = this.getDisplayValue(this.address);
           }
         });
       }
     });
-
     if (this.modeSwitcher) {
       this.addEventListener(this.modeSwitcher, "change", () => {
         if (!this.modeSwitcher) {
           return;
         }
-
         this.mode = this.modeSwitcher.checked ? PlsPlusAddressMode.Manual : PlsPlusAddressMode.Autocomplete;
-
         if (!this.builderMode) {
           if (this.manualMode) {
             this.restoreComponentsContext();
@@ -18716,42 +18651,33 @@ class PlsPlusAddress extends FieldsetComponent {
             this.clearAddress(this.searchInput);
           }
         }
-
         this.redraw();
       });
     }
-
     if (!this.builderMode) {
       this.removeValueIcon.forEach((removeValueIcon, index) => {
         this.updateRemoveIcon(index);
-
         const removeValueHandler = () => {
           var _this$searchInput;
-
           const searchInput = (_this$searchInput = this.searchInput) === null || _this$searchInput === void 0 ? void 0 : _this$searchInput[index];
           this.clearAddress(searchInput, index);
-
           if (searchInput) {
             searchInput.focus();
           }
         };
-
         this.addEventListener(removeValueIcon, "click", removeValueHandler);
         this.addEventListener(removeValueIcon, "keydown", _ref => {
           let {
             key
           } = _ref;
-
           if (key === "Enter") {
             removeValueHandler();
           }
         });
       });
     }
-
     return result;
   }
-
   redraw() {
     const modeSwitcherInFocus = this.modeSwitcher && document.activeElement === this.modeSwitcher;
     const searchInputInFocus = this.searchInput && document.activeElement === this.searchInput;
@@ -18759,24 +18685,18 @@ class PlsPlusAddress extends FieldsetComponent {
       if (modeSwitcherInFocus && this.modeSwitcher) {
         this.modeSwitcher.focus();
       }
-
       if (searchInputInFocus && this.searchInput) {
         this.searchInput.focus();
       }
-
       return result;
     });
   }
-
   clearAddress(element, index) {
     var _this$container4;
-
     this.address = this.emptyValue.address;
-
     if (element) {
       element.value = "";
     }
-
     (_this$container4 = this.container) === null || _this$container4 === void 0 ? void 0 : _this$container4.getComponents().forEach(component => {
       const childElement = document.getElementById("".concat(component.id, "-").concat(component.component.key));
       if (childElement) childElement.value = component.dataValue;
@@ -18784,20 +18704,15 @@ class PlsPlusAddress extends FieldsetComponent {
     this.updateRemoveIcon(index);
     this.redraw();
   }
-
   getDisplayValue() {
     let value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.address;
     return this.provider ? this.provider.getDisplayValue(value) : "";
   }
-
   updateRemoveIcon(index) {
     var _this$removeValueIcon;
-
     const removeValueIcon = (_this$removeValueIcon = this.removeValueIcon) === null || _this$removeValueIcon === void 0 ? void 0 : _this$removeValueIcon[index];
-
     if (removeValueIcon) {
       const value = this.address;
-
       if (this.manualMode || this.isEmpty(value) || lodash_default().isEmpty(value) || this.disabled || value.autocompleteAddress === "") {
         this.addClass(removeValueIcon, RemoveValueIconHiddenClass);
       } else {
@@ -18805,16 +18720,213 @@ class PlsPlusAddress extends FieldsetComponent {
       }
     }
   }
-
   focus() {
     if (this.searchInput && this.searchInput[0]) {
       this.searchInput[0].focus();
     }
   }
-
 }
 PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/PlsPlusAddress/index.js
+
+;// CONCATENATED MODULE: ./src/components/googleLocation/editForm/Location.edit.map.js
+/* harmony default export */ const Location_edit_map = ([{
+  type: "textfield",
+  input: true,
+  key: "map.key",
+  label: "API Key",
+  tooltip: "The API key for Google Maps. See <a href='https://developers.google.com/maps/documentation/geocoding/get-api-key' target='_blank'>Get an API Key</a> for more information.",
+  placeholder: "xxxxxxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxx",
+  weight: 0
+}, {
+  type: "textfield",
+  input: true,
+  label: "Region Bias",
+  key: "map.region",
+  tooltip: "The region bias to use for this search. See <a href='https://developers.google.com/maps/documentation/geocoding/intro#RegionCodes' target='_blank'>Region Biasing</a> for more information.",
+  placeholder: "Dallas",
+  weight: 10
+}, {
+  type: "textfield",
+  input: true,
+  label: "Google Map ID",
+  key: "map.gmapId",
+  tooltip: "This is the Google Maps ID you wish to use when showing the location map.",
+  weight: 20
+}]);
+;// CONCATENATED MODULE: ./src/components/googleLocation/GoogleLocation.form.js
+
+const GoogleLocation_form_baseEditForm = Formio.Components.components.base.editForm;
+/* harmony default export */ function GoogleLocation_form() {
+  for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+    extend[_key] = arguments[_key];
+  }
+  return GoogleLocation_form_baseEditForm([{
+    label: "Map",
+    key: "map",
+    weight: 1,
+    components: Location_edit_map
+  }], ...extend);
+}
+;// CONCATENATED MODULE: ./src/components/googleLocation/GoogleLocation.js
+/* global google */
+
+
+const TextFieldComponent = Formio.Components.components.textfield;
+class GoogleLocation extends TextFieldComponent {
+  static schema() {
+    for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
+      extend[_key] = arguments[_key];
+    }
+    return TextFieldComponent.schema({
+      type: "googlelocation",
+      label: "Google Location",
+      key: "location",
+      map: {
+        key: "",
+        region: "",
+        gmapId: "",
+        autocompleteOptions: {}
+      }
+    }, ...extend);
+  }
+  static get builderInfo() {
+    return {
+      title: "Google Location",
+      group: "custom",
+      icon: "map",
+      weight: 36,
+      schema: GoogleLocation.schema()
+    };
+  }
+  init() {
+    super.init();
+    let src = "https://maps.googleapis.com/maps/api/js?v=3&libraries=places&callback=googleMapsCallback";
+    if (this.component.map && this.component.map.key) {
+      src += "&key=".concat(this.component.map.key);
+    }
+    if (this.component.map && this.component.map.region) {
+      src += "&region=".concat(this.component.map.region);
+    }
+    Formio.requireLibrary("googleMaps", "google.maps.places", src);
+  }
+  get defaultSchema() {
+    return GoogleLocation.schema();
+  }
+  get emptyValue() {
+    return "";
+  }
+  get inputInfo() {
+    const info = super.inputInfo;
+    info.attr.class += " Gmap-search";
+    return info;
+  }
+  renderElement(value, index) {
+    return super.renderElement(value, index) + this.renderTemplate("googleMap", {
+      mapId: this.component.map.gmapId
+    });
+  }
+  attach(element) {
+    const ret = super.attach(element);
+    this.loadRefs(element, {
+      gmapElement: "multiple"
+    });
+    return ret;
+  }
+  attachElement(element, index) {
+    super.attachElement(element, index);
+    Formio.libraryReady("googleMaps").then(() => {
+      const defaultLatlng = new google.maps.LatLng(-27.470125, 153.021072); // brisbane
+      // const defaultLatlng = new google.maps.LatLng(45.5041482, -73.5574125);
+      const options = {
+        zoom: 10,
+        center: defaultLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        styles: [{
+          featureType: "poi",
+          stylers: [{
+            visibility: "off"
+          }]
+        }, {
+          featureType: "transit",
+          stylers: [{
+            visibility: "off"
+          }]
+        }]
+      };
+      if (!this.refs.gmapElement[index]) {
+        return;
+      }
+      element.map = new google.maps.Map(this.refs.gmapElement[index], options);
+      this.addMarker(defaultLatlng, "Default Marker", element);
+      let autocompleteOptions = {};
+      if (this.component.map) {
+        autocompleteOptions = this.component.map.autocompleteOptions || {};
+      }
+      const autocomplete = new google.maps.places.Autocomplete(element, autocompleteOptions);
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) {
+          console.log("Autocomplete's returned place contains no geometry");
+          return;
+        }
+
+        // If the place has a geometry, then present it on a map.
+        if (place.geometry.viewport) {
+          element.map.fitBounds(place.geometry.viewport);
+        } else {
+          element.map.setCenter(place.geometry.location);
+          element.map.setZoom(17); // Why 17? Because it looks good.
+        }
+
+        element.marker.setIcon( /** @type {google.maps.Icon} */{
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(35, 35)
+        });
+        element.marker.setPosition(place.geometry.location);
+        this.setValue(place.name);
+      });
+    });
+  }
+  addMarker(latlngIn, title, element) {
+    let latlng = latlngIn;
+    element.marker = new google.maps.Marker({
+      position: latlng,
+      map: element.map,
+      title,
+      draggable: true
+    });
+    element.marker.addListener("dragend", event => {
+      const geocoder = new google.maps.Geocoder();
+      latlng = {
+        lat: parseFloat(event.latLng.lat()),
+        lng: parseFloat(event.latLng.lng())
+      };
+      geocoder.geocode({
+        location: latlng
+      }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          if (results[1]) {
+            this.setValue(results[0].formatted_address);
+          } else {
+            console.log("No results found");
+          }
+        } else {
+          console.log("Geocoder failed due to: ".concat(status));
+        }
+      });
+    });
+  }
+}
+GoogleLocation.editForm = GoogleLocation_form;
+
+// Register the component to the Formio.Components registry.
+// This is not required as we dynamicly load them based on lower
+// Formio.Components.addComponent("location", GoogleLocation);
+;// CONCATENATED MODULE: ./src/components/googleLocation/index.js
 
 ;// CONCATENATED MODULE: ./src/components/index.js
 /*
@@ -18822,7 +18934,11 @@ PlsPlusAddress.editForm = PlsPlusAddress_form;
  *
  */
 
- // export * from "./SSOButton";
+
+// export * from "./PlsPlusAddressWithMap";
+// export * from "./SSOButton";
+
+// export * from "./openStreetMapLocation";
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/boilerplateButton/form.ejs
 /* harmony default export */ const boilerplateButton_form = ("<!--\n  boilerplate from https://github.com/formio/formio.js/blob/master/src/templates/bootstrap/button/form.ejs\n-->\n<div class=\"mb-2\">\n  {{ctx.component.customDescription}}\n</div>\n<{{ctx.input.type}}\n  ref=\"button\"\n  {% for (var attr in ctx.input.attr) { %}\n  {{attr}}=\"{{ctx.input.attr[attr]}}\"\n  {% } %}\n  {% if (ctx.component.description) { %}\n    aria-describedby=\"d-{{ctx.instance.id}}-{{ctx.component.key}}\"\n  {% } %}\n>\n{% if (ctx.component.leftIcon) { %}<span class=\"{{ctx.component.leftIcon}}\"></span>&nbsp;{% } %}\n{{ctx.input.content}}\n{% if (ctx.component.tooltip) { %}\n  <i ref=\"tooltip\" class=\"{{ctx.iconClass('question-sign')}} text-muted\" data-tooltip=\"{{ctx.component.tooltip}}\"></i>\n{% } %}\n{% if (ctx.component.rightIcon) { %}&nbsp;<span class=\"{{ctx.component.rightIcon}}\"></span>{% } %}\n</{{ctx.input.type}}>\n<div ref=\"buttonMessageContainer\">\n  <span class=\"help-block\" ref=\"buttonMessage\"></span>\n</div>\n");
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/boilerplateButton/html.ejs
@@ -18833,6 +18949,7 @@ PlsPlusAddress.editForm = PlsPlusAddress_form;
  * https://github.com/formio/formio.js/blob/master/src/templates/bootstrap/button/index.js
  *
  */
+
 
 
 const boilerplateButton = {
@@ -18851,11 +18968,29 @@ const boilerplateButton = {
  */
 
 
+
 const plsPlusAddress = {
   form: plsPlusAddress_form,
   html: plsPlusAddress_html
 };
+;// CONCATENATED MODULE: ./src/templates/bootstrap/googleMap/form.ejs
+/* harmony default export */ const googleMap_form = ("<div id=\"{{ctx.mapId}}\" style=\"min-height: 300px; height: calc(100vh - 600px);\" ref=\"gmapElement\"></div>");
+;// CONCATENATED MODULE: ./src/templates/bootstrap/googleMap/index.js
+
+const googleMap = {
+  form: googleMap_form
+};
+;// CONCATENATED MODULE: ./src/templates/bootstrap/leafletMap/form.ejs
+/* harmony default export */ const leafletMap_form = ("<div id=\"{{ctx.mapId}}\" style=\"min-height: 300px; height: calc(100vh - 600px);\" ref=\"leafletElement\"></div>");
+;// CONCATENATED MODULE: ./src/templates/bootstrap/leafletMap/index.js
+
+const leafletMap = {
+  form: leafletMap_form
+};
 ;// CONCATENATED MODULE: ./src/templates/bootstrap/index.js
+
+
+// export * from "./plsPlusAddressWithMap";
 
 
 ;// CONCATENATED MODULE: ./src/templates/index.js
@@ -18872,82 +19007,62 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
   static get name() {
     return "plsPlus";
   }
-
   static get displayName() {
     return "PLS Plus";
   }
-
   get queryProperty() {
     return "query";
   }
-
   get responseProperty() {
     return "AutoCompleteAddressResponse.AutoCompleteAddressResult.string";
   }
-
   get displayValueProperty() {
     return "autocompleteAddress";
   }
-
   getAddress1(addressLine) {
     if (addressLine.siteName && addressLine.complexDesc && addressLine.streetAddress) {
       return addressLine.siteName;
     }
-
     if (!addressLine.siteName && addressLine.complexDesc && addressLine.streetAddress) {
       return addressLine.complexDesc;
     }
-
     if (addressLine.siteName && !addressLine.complexDesc && addressLine.streetAddress) {
       return addressLine.siteName;
     }
-
     if (!addressLine.siteName && !addressLine.complexDesc && addressLine.streetAddress) {
       return addressLine.streetAddress;
     }
-
     return "";
   }
-
   getAddress2(addressLine) {
     if (addressLine.siteName && addressLine.complexDesc && addressLine.streetAddress) {
       return addressLine.complexDesc;
     }
-
     if (!addressLine.siteName && addressLine.complexDesc && addressLine.streetAddress) {
       return addressLine.streetAddress;
     }
-
     if (addressLine.siteName && !addressLine.complexDesc && addressLine.streetAddress) {
       return addressLine.streetAddress;
     }
-
     return "";
   }
-
   getAddress3(addressLine) {
     if (addressLine.siteName && addressLine.complexDesc && addressLine.streetAddress) {
       return addressLine.streetAddress;
     }
-
     return "";
   }
-
   getCity(addressLine) {
     return addressLine.Locality || "";
   }
-
   getState(addressLine) {
     return addressLine.State || "";
   }
-
   getPostcode(addressLine) {
     return addressLine.Postcode || "";
   }
-
   breakAddress(address) {
     var _address$Parcel, _address$Unit, _address$Unit2, _address$Level, _address$Level2, _address$RoadNumber, _address$RoadNumber2, _address$RoadNumber3, _address$Road, _address$Road2, _address$Road3;
-
     const siteName = address.SiteName || "";
     const lot = (_address$Parcel = address.Parcel) !== null && _address$Parcel !== void 0 && _address$Parcel.Lot ? "LOT ".concat(address.Parcel.Lot) : undefined;
     const complexDesc = [lot, (_address$Unit = address.Unit) === null || _address$Unit === void 0 ? void 0 : _address$Unit.TypeCode, (_address$Unit2 = address.Unit) === null || _address$Unit2 === void 0 ? void 0 : _address$Unit2.Number, (_address$Level = address.Level) === null || _address$Level === void 0 ? void 0 : _address$Level.TypeCode, (_address$Level2 = address.Level) === null || _address$Level2 === void 0 ? void 0 : _address$Level2.Number].filter(o => o !== undefined).join(" ");
@@ -18972,14 +19087,12 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
       postcode: this.getPostcode(addressLine)
     };
   }
-
   makeParseRequest() {
     let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     return Formio.makeStaticRequest(this.getParseRequestUrl(options), "GET", null, {
       noToken: true
     });
   }
-
   parseAddress(query) {
     let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const requestOptions = this.getRequestOptions(options);
@@ -18992,7 +19105,6 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
       return lodash_default().maxBy(response.ParseAddressResponse.ParseAddressResult.Results.Result, r => r.Confidence).Address;
     });
   }
-
   search(query) {
     let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const requestOptions = this.getRequestOptions(options);
@@ -19000,11 +19112,9 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
     params[this.queryProperty] = query.trim();
     return this.makeRequest(requestOptions).then(result => this.responseProperty ? lodash_default().get(result, this.responseProperty, []) : result);
   }
-
   getDisplayValue(address) {
     return lodash_default().isEmpty(address) ? "" : lodash_default().get(address, this.displayValueProperty, "");
   }
-
   getRequestUrl() {
     let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     const {
@@ -19013,7 +19123,6 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
     } = options;
     return "".concat(apiBase || defaultApiBase, "/pls-plus-qg/AutoCompleteAddress?").concat(this.serialize(params));
   }
-
   getParseRequestUrl() {
     let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     const {
@@ -19022,7 +19131,6 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
     } = options;
     return "".concat(apiBase || defaultApiBase, "/pls-plus-qg/ParseAddress?").concat(this.serialize(params));
   }
-
 }
 ;// CONCATENATED MODULE: ./src/providers/address/index.js
 
@@ -19045,6 +19153,7 @@ class PlsPlusAddressProvider extends CustomAddressProvider {
 
 Formio.use({
   components: getComponents(components_namespaceObject),
+  // load components by lower casing import name
   templates: templates,
   providers: providers,
   options: (build_options_default())
