@@ -7,7 +7,7 @@
 		exports["FormioScript"] = factory();
 	else
 		root["FormioScript"] = factory();
-})(self, function() {
+})(self, () => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope

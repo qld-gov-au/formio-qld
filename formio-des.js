@@ -7,7 +7,7 @@
 		exports["FormioQldDes"] = factory();
 	else
 		root["FormioQldDes"] = factory();
-})(self, function() {
+})(self, () => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
