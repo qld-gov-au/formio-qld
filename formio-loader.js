@@ -110,8 +110,8 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "initFormio": () => (/* reexport */ initFormio),
-  "initFormioInstance": () => (/* reexport */ initFormioInstance)
+  initFormio: () => (/* reexport */ initFormio),
+  initFormioInstance: () => (/* reexport */ initFormioInstance)
 });
 
 // EXTERNAL MODULE: ./src/config/createForm.options.js
