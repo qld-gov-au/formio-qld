@@ -49,7 +49,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "init": () => (/* binding */ init)
+  init: () => (/* binding */ init)
 });
 
 ;// CONCATENATED MODULE: ./src/helpers/FormioScript/FormioScript.js
