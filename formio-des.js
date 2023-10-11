@@ -18234,7 +18234,7 @@ class PlsPlusAddress extends FieldsetComponent {
   }
   restoreComponentsContext() {
     var _this$container2;
-    (_this$container2 = this.container) === null || _this$container2 === void 0 ? void 0 : _this$container2.getComponents().forEach(component => {
+    (_this$container2 = this.container) === null || _this$container2 === void 0 || _this$container2.getComponents().forEach(component => {
       component.data = this.container.dataValue;
       component.setValue(component.dataValue, {
         noUpdateEvent: true
@@ -18296,7 +18296,7 @@ class PlsPlusAddress extends FieldsetComponent {
   }
   renderElement(value) {
     var _this$container3, _this$component$provi2;
-    (_this$container3 = this.container) === null || _this$container3 === void 0 ? void 0 : _this$container3.getComponents().forEach(component => {
+    (_this$container3 = this.container) === null || _this$container3 === void 0 || _this$container3.getComponents().forEach(component => {
       if (!this.builderMode && this.attached) {
         component.disabled = component.originalComponent.disabled || !this.manualMode;
         component.component.validate = !this.manualMode ? {} : component.originalComponent.validate;
@@ -18464,7 +18464,7 @@ class PlsPlusAddress extends FieldsetComponent {
     if (element) {
       element.value = "";
     }
-    (_this$container4 = this.container) === null || _this$container4 === void 0 ? void 0 : _this$container4.getComponents().forEach(component => {
+    (_this$container4 = this.container) === null || _this$container4 === void 0 || _this$container4.getComponents().forEach(component => {
       const childElement = document.getElementById("".concat(component.id, "-").concat(component.component.key));
       if (childElement) childElement.value = component.dataValue;
     });
