@@ -7,7 +7,7 @@
 		exports["FormioScript"] = factory();
 	else
 		root["FormioScript"] = factory();
-})(self, () => {
+})(self, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
@@ -49,7 +49,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  init: () => (/* binding */ init)
+  "init": () => (/* binding */ init)
 });
 
 ;// CONCATENATED MODULE: ./src/helpers/FormioScript/FormioScript.js
@@ -60,6 +60,7 @@ const createScripts = (scripts, i, mainResolve) => {
     mainResolve();
     return;
   }
+
   const {
     type,
     async,
@@ -67,6 +68,7 @@ const createScripts = (scripts, i, mainResolve) => {
     href,
     rel
   } = scripts[i];
+
   if (!document.querySelector("".concat(type, "[src='").concat(src, "']")) && !document.querySelector("".concat(type, "[href='").concat(href, "']"))) {
     const promise = new Promise(resolve => {
       const elem = document.createElement(type);
@@ -75,6 +77,7 @@ const createScripts = (scripts, i, mainResolve) => {
       if (href !== undefined) elem.setAttribute("href", href);
       if (rel !== undefined) elem.setAttribute("rel", rel);
       document.body.appendChild(elem);
+
       elem.onload = () => {
         console.info("FormioScript loaded:", src || href);
         resolve();
@@ -104,8 +107,7 @@ const getDefaultScripts = _ref => {
     type: "script",
     src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio-qld.js"),
     async: false
-  },
-  // note: formio-loader should always load last
+  }, // note: formio-loader should always load last
   {
     type: "script",
     src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio-loader.js"),
@@ -139,7 +141,7 @@ const initScript = scripts => new Promise(resolve => {
 
 ;// CONCATENATED MODULE: ./src/helpers/FormioScript/index.gitbridge.js
 
-const version = window.formIOGitBridgeID || "248740";
+const version = window.formioQldCdnVersion || "248740";
 const scripts = [{
   type: "script",
   src: "/__data/assets/git_bridge/0025/".concat(version, "/formio.full.js"),
@@ -152,8 +154,7 @@ const scripts = [{
   type: "script",
   src: "/__data/assets/git_bridge/0025/".concat(version, "/formio-qld.js"),
   async: false
-},
-// note: formio-loader should always load last
+}, // note: formio-loader should always load last
 {
   type: "script",
   src: "/__data/assets/git_bridge/0025/".concat(version, "/formio-loader.js"),
