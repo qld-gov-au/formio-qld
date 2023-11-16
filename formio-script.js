@@ -53,7 +53,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 ;// CONCATENATED MODULE: ./src/helpers/FormioScript/FormioScript.js
-const defaultVersion = window.formioQldCdnVersion || "v1/v1.x.x-latest";
+const defaultVersion = window.formioQldCdnVersion || "v2/v2.x.x-latest";
 const createScripts = (scripts, i, mainResolve) => {
   if (i > scripts.length - 1) {
     FormioLoader.initFormio();
