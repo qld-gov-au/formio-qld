@@ -337,9 +337,13 @@ const overrideErrorForm = renderMsg => {
 const defaultInitFormioAction = () => {
   overrideErrorForm(() => "This form is currently unavailable due to maintenance. Please try again later.");
 };
-const initFormio = () => {
+const initFormio = function () {
+  let cdn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
   // Init form
   Formio.icons = "fontawesome";
+  if (cdn) {
+    Formio.cdn.setOverrideUrl("grid", cdn);
+  }
   if (premium) Formio.use(premium);
 
   // default callback after Formio is loaded
