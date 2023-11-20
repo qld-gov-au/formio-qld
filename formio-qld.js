@@ -158,7 +158,7 @@ return /******/ (() => { // webpackBootstrap
          * Redraw the autocomplete div element with suggestions
          */
         function update() {
-            container.innerHTML = '';
+            container.textContent = '';
             input.setAttribute('aria-activedescendant', '');
             // function for rendering autocomplete suggestions
             var render = function (item, _, __) {
@@ -18828,7 +18828,7 @@ PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/googleLocation/GoogleLocation.form.js
 
 const GoogleLocation_form_baseEditForm = Formio.Components.components.base.editForm;
-/* harmony default export */ function GoogleLocation_form() {
+function googleLocationFormWrapper() {
   for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
     extend[_key] = arguments[_key];
   }
@@ -18992,7 +18992,7 @@ class GoogleLocation extends TextFieldComponent {
     });
   }
 }
-GoogleLocation.editForm = GoogleLocation_form;
+GoogleLocation.editForm = googleLocationFormWrapper;
 
 // Register the component to the Formio.Components registry.
 // This is not required as we dynamicly load them based on lower

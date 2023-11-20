@@ -158,7 +158,7 @@ return /******/ (() => { // webpackBootstrap
          * Redraw the autocomplete div element with suggestions
          */
         function update() {
-            container.innerHTML = '';
+            container.textContent = '';
             input.setAttribute('aria-activedescendant', '');
             // function for rendering autocomplete suggestions
             var render = function (item, _, __) {
@@ -18526,7 +18526,7 @@ PlsPlusAddress.editForm = PlsPlusAddress_form;
 ;// CONCATENATED MODULE: ./src/components/googleLocation/GoogleLocation.form.js
 
 const GoogleLocation_form_baseEditForm = Formio.Components.components.base.editForm;
-/* harmony default export */ function GoogleLocation_form() {
+function googleLocationFormWrapper() {
   for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
     extend[_key] = arguments[_key];
   }
@@ -18690,7 +18690,7 @@ class GoogleLocation extends TextFieldComponent {
     });
   }
 }
-GoogleLocation.editForm = GoogleLocation_form;
+GoogleLocation.editForm = googleLocationFormWrapper;
 
 // Register the component to the Formio.Components registry.
 // This is not required as we dynamicly load them based on lower
@@ -18725,7 +18725,7 @@ GoogleLocation.editForm = GoogleLocation_form;
 ;// CONCATENATED MODULE: ./src/components/openStreetMapLocation/OpenStreetMapLocation.form.js
 
 const OpenStreetMapLocation_form_baseEditForm = Formio.Components.components.base.editForm;
-/* harmony default export */ function OpenStreetMapLocation_form() {
+function openStreetMapFormWrapper() {
   for (var _len = arguments.length, extend = new Array(_len), _key = 0; _key < _len; _key++) {
     extend[_key] = arguments[_key];
   }
@@ -18878,7 +18878,7 @@ class OpenStreetMapLocation extends OpenStreetMapLocation_TextFieldComponent {
     marker.addTo(element.map);
     // element.marker = marker;
     // this.addMarker(defaultLatlng, "Default Marker", element);
-    marker.on("moveend", function (event) {
+    marker.on("moveend", function markerMoveListener(event) {
       // marker.addListener("moveend", (event) => {
       console.log(event);
       // const markerInternal = e.target;
@@ -18923,7 +18923,7 @@ class OpenStreetMapLocation extends OpenStreetMapLocation_TextFieldComponent {
   }
 }
 
-OpenStreetMapLocation.editForm = OpenStreetMapLocation_form;
+OpenStreetMapLocation.editForm = openStreetMapFormWrapper;
 
 // Register the component to the Formio.Components registry.
 // This is not required as we dynamicly load them based on lower
