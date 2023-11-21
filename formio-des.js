@@ -158,7 +158,7 @@ return /******/ (() => { // webpackBootstrap
          * Redraw the autocomplete div element with suggestions
          */
         function update() {
-            container.innerHTML = '';
+            container.textContent = '';
             input.setAttribute('aria-activedescendant', '');
             // function for rendering autocomplete suggestions
             var render = function (item, _, __) {
