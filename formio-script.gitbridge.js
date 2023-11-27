@@ -87,91 +87,65 @@ const createScripts = (scripts, i, mainResolve) => {
     createScripts(scripts, i + 1, mainResolve);
   }
 };
-const getDefaultScripts = _ref => {
-  let {
-    subdomain,
-    version = defaultVersion
-  } = _ref;
+const getDefaultCdn = function () {
+  let subdomain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "static";
+  let version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultVersion;
+  return "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version);
+};
+const getDefaultScripts = baseUrl => {
   return [{
     type: "script",
-    src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio.full.js"),
+    src: "".concat(baseUrl, "/formio.full.js"),
     async: false
   }, {
     type: "script",
-    src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/premium.min.js"),
+    src: "".concat(baseUrl, "/premium.min.js"),
     async: false
   }, {
     type: "script",
-    src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio-qld.js"),
+    src: "".concat(baseUrl, "/formio-qld.js"),
     async: false
   },
   // note: formio-loader should always load last
   {
     type: "script",
-    src: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio-loader.js"),
+    src: "".concat(baseUrl, "/formio-loader.js"),
     async: false
   }, {
     type: "link",
-    href: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio.full.min.css"),
+    href: "".concat(baseUrl, "/formio.full.min.css"),
     rel: "stylesheet"
   }, {
     type: "link",
-    href: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/premium.css"),
+    href: "".concat(baseUrl, "/premium.css"),
     rel: "stylesheet"
   }, {
     type: "link",
-    href: "https://".concat(subdomain, ".qgov.net.au/formio-qld/").concat(version, "/formio-qld.min.css"),
+    href: "".concat(baseUrl, "/formio-qld.min.css"),
     rel: "stylesheet"
   }];
 };
-const initScript = scripts => new Promise(resolve => {
-  if (window.formioScriptLoaded) {
-    if (typeof FormioLoader !== "undefined") setTimeout(() => {
-      FormioLoader.initFormio();
-      resolve();
-    });
-  } else {
-    window.formioScriptLoaded = true;
-    createScripts(scripts, 0, resolve);
-  }
-});
+const initScript = function (scripts) {
+  let cdn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  return new Promise(resolve => {
+    if (window.formioScriptLoaded) {
+      if (typeof FormioLoader !== "undefined") setTimeout(() => {
+        FormioLoader.initFormio(cdn);
+        resolve();
+      });
+    } else {
+      window.formioScriptLoaded = true;
+      createScripts(scripts, 0, resolve);
+    }
+  });
+};
 ;// CONCATENATED MODULE: ./src/helpers/FormioScript/index.js
 
 ;// CONCATENATED MODULE: ./src/helpers/FormioScript/index.gitbridge.js
 
 const version = window.formIOGitBridgeID || "248740";
-const scripts = [{
-  type: "script",
-  src: "/__data/assets/git_bridge/0025/".concat(version, "/formio.full.js"),
-  async: false
-}, {
-  type: "script",
-  src: "/__data/assets/git_bridge/0025/".concat(version, "/premium.min.js"),
-  async: false
-}, {
-  type: "script",
-  src: "/__data/assets/git_bridge/0025/".concat(version, "/formio-qld.js"),
-  async: false
-},
-// note: formio-loader should always load last
-{
-  type: "script",
-  src: "/__data/assets/git_bridge/0025/".concat(version, "/formio-loader.js"),
-  async: false
-}, {
-  type: "link",
-  href: "/__data/assets/git_bridge/0025/".concat(version, "/formio.full.min.css"),
-  rel: "stylesheet"
-}, {
-  type: "link",
-  href: "/__data/assets/git_bridge/0025/".concat(version, "/premium.css"),
-  rel: "stylesheet"
-}, {
-  type: "link",
-  href: "/__data/assets/git_bridge/0025/".concat(version, "/formio-qld.min.css"),
-  rel: "stylesheet"
-}];
-const init = () => initScript(scripts);
+const scripts = getDefaultScripts("/__data/assets/git_bridge/0025/".concat(version));
+const init = () => initScript(scripts, getDefaultCdn());
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
