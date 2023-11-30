@@ -18647,7 +18647,6 @@ class GoogleLocation extends TextFieldComponent {
           element.map.setCenter(place.geometry.location);
           element.map.setZoom(17); // Why 17? Because it looks good.
         }
-
         element.marker.setIcon( /** @type {google.maps.Icon} */{
           url: place.icon,
           size: new google.maps.Size(71, 71),
@@ -18791,7 +18790,6 @@ class OpenStreetMapLocation extends OpenStreetMapLocation_TextFieldComponent {
     //   element.map.marker.setLatLng(value);
     // }
   }
-
   get inputInfo() {
     const info = super.inputInfo;
     info.attr.class += " leaflet-search";
@@ -18868,7 +18866,6 @@ class OpenStreetMapLocation extends OpenStreetMapLocation_TextFieldComponent {
       // });
     });
   }
-
   addMarker(latlngIn, title, element, func) {
     const marker = L.marker(latlngIn, {
       draggable: true,
@@ -18922,7 +18919,6 @@ class OpenStreetMapLocation extends OpenStreetMapLocation_TextFieldComponent {
     // });
   }
 }
-
 OpenStreetMapLocation.editForm = openStreetMapFormWrapper;
 
 // Register the component to the Formio.Components registry.
