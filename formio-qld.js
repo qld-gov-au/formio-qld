@@ -17670,7 +17670,7 @@ PdfSubmitButton.editForm = PdfSubmitButton_form;
 
 ;// CONCATENATED MODULE: ./node_modules/autocompleter/autocomplete.es.js
 /**
- * Copyright (c) 2016 Denys Krasnoshchok
+ * Copyright (c) 2016 Denis Taran
  *
  * Homepage: https://smartscheduling.com/en/documentation/autocomplete
  * Source: https://github.com/kraaden/autocomplete
@@ -17704,7 +17704,7 @@ function autocomplete(settings) {
         throw new Error('input undefined');
     }
     var input = settings.input;
-    container.className = 'autocomplete ' + (settings.className || '');
+    container.className = [container.className, 'autocomplete', settings.className || ''].join(' ').trim();
     container.setAttribute('role', 'listbox');
     input.setAttribute('role', 'combobox');
     input.setAttribute('aria-expanded', 'false');
