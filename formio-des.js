@@ -17369,7 +17369,7 @@ const getComponents = components => {
  * Copyright (c) 2016 Denis Taran
  *
  * Homepage: https://smartscheduling.com/en/documentation/autocomplete
- * Source: https://github.com/kraaden/autocomplete
+ * Source: https://github.com/denis-taran/autocomplete
  *
  * MIT License
  */
