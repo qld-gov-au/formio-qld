@@ -18630,7 +18630,7 @@ class GoogleLocation extends TextFieldComponent {
           element.map.setCenter(place.geometry.location);
           element.map.setZoom(17); // Why 17? Because it looks good.
         }
-        element.marker.setIcon( /** @type {google.maps.Icon} */{
+        element.marker.setIcon(/** @type {google.maps.Icon} */{
           url: place.icon,
           size: new google.maps.Size(71, 71),
           origin: new google.maps.Point(0, 0),
