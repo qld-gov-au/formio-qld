@@ -17332,8 +17332,6 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
 
 // NAMESPACE OBJECT: ./src/components/index.des.js
 var index_des_namespaceObject = {};
