@@ -11,22 +11,6 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 764:
-/***/ ((module) => {
-
-module.exports = {
-  builder: {
-    builder: {
-      custom: {
-        title: "Custom",
-        weight: 50
-      }
-    }
-  }
-};
-
-/***/ }),
-
 /***/ 543:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17233,6 +17217,22 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
   else {}
 }.call(this));
 
+
+/***/ }),
+
+/***/ 764:
+/***/ ((module) => {
+
+module.exports = {
+  builder: {
+    builder: {
+      custom: {
+        title: "Custom",
+        weight: 50
+      }
+    }
+  }
+};
 
 /***/ })
 
