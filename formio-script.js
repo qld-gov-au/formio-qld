@@ -77,7 +77,6 @@ const createScripts = (scripts, i, mainResolve) => {
       document.body.appendChild(elem);
       elem.onload = () => {
         console.info("FormioScript loaded:", src || href);
-        console.log("BOING");
         resolve();
       };
     });
